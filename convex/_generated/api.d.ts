@@ -8,13 +8,23 @@
  * @module
  */
 
+import type * as http from "../http.js";
+import type * as pitches from "../pitches.js";
+import type * as prospects from "../prospects.js";
+import type * as searches from "../searches.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  http: typeof http;
+  pitches: typeof pitches;
+  prospects: typeof prospects;
+  searches: typeof searches;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.

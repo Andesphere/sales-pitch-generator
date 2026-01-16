@@ -4,11 +4,11 @@ description: Find businesses matching criteria (industry, location) and output a
 argument-hint: <industry> --location "<location>" [--count 10] [--local-only]
 allowed-tools:
   - WebSearch
+  - WebFetch
   - mcp__tavily__tavily-search
   - mcp__exa__web_search_exa
   - Read
   - Glob
-  - Write
 ---
 
 # Prospect - Lead Generation for Icebreaker Outreach
@@ -171,17 +171,52 @@ Reference: `OUTPUT_SCHEMA.md` for full JSON schema.
 ...
 ```
 
-### Step 9: Save to JSON
+### Step 9: Save to Convex via HTTP API
 
-1. **Create filename**: `{industry}_{location}_{timestamp}.json`
-   - Slug rules: lowercase, replace spaces with hyphens, remove special characters
-   - Timestamp format: `YYYY-MM-DDTHH-MM-SSZ`
-   - Example: `launderette_southend-on-sea_2026-01-16T14-30-00Z.json`
+Save all data to Convex using the HTTP API (see CLAUDE.md for full API reference).
 
-2. **Write to**: `prospects/{filename}.json`
-   - Create the `prospects/` folder if it doesn't exist
+**POST to:** `https://flippant-dodo-971.convex.site/api/prospect`
 
-3. **Confirm save**: Display the saved file path
+**Request body:**
+```json
+{
+  "search": {
+    "industry": "[industry]",
+    "location": "[location]",
+    "count": [requested count],
+    "localOnly": [true/false],
+    "totalFound": [raw results count],
+    "afterDeduplication": [deduplicated count],
+    "localCount": [local businesses count],
+    "prospectsReturned": [final count],
+    "searchQueries": ["query1", "query2", ...]
+  },
+  "prospects": [
+    {
+      "name": "Business Name",
+      "url": "https://example.com",
+      "city": "Southend-on-Sea",
+      "locationText": "Full address text",
+      "isLocal": true,
+      "confidence": "high",
+      "sources": ["tavily", "exa"],
+      "notes": null
+    }
+  ]
+}
+```
+
+**Example WebFetch call:**
+```
+WebFetch POST https://flippant-dodo-971.convex.site/api/prospect
+Body: { "search": {...}, "prospects": [...] }
+Prompt: "Return the full JSON response"
+```
+
+**Response handling:**
+- `201`: Success - extract `searchId` and `prospectsCreated` from response
+- `400`: Validation error - report the message to user
+- `409`: Duplicates detected - report which URLs were skipped (still creates search and non-duplicate prospects)
 
 ---
 
@@ -216,13 +251,14 @@ To generate personalized pitches for these prospects:
 /icebreaker https://another.co.uk
 ```
 
-Or process the full list from: `prospects/{filename}.json`
-
 ---
 
-### Saved
+### Saved to Convex
 
-**File:** `prospects/{industry}_{location}_{timestamp}.json`
+**Search ID:** `[searchId]`
+**Prospects created:** [count] records
+**Duplicates skipped:** [count] (if any)
+**Dashboard:** https://dashboard.convex.dev/d/flippant-dodo-971
 
 ---
 
@@ -254,3 +290,7 @@ Or process the full list from: `prospects/{filename}.json`
 **If search fails:**
 - Report the error
 - Suggest trying again or using different terms
+
+**If Convex API returns error:**
+- Report the error message from the API response
+- If duplicates were skipped, inform the user which URLs already existed

@@ -8,7 +8,6 @@ allowed-tools:
   - Read
   - Glob
   - Grep
-  - Write
   - mcp__exa__web_search_exa
 ---
 
@@ -106,7 +105,6 @@ Once you have the site's link structure, **fetch the most relevant pages in para
 1. Services/Products page - for offerings and pricing
 2. Contact page - for hours, location, contact methods
 3. About page - for company story and USPs
-4. Pricing page - if separate from services
 
 **Example parallel fetch:**
 ```
@@ -200,25 +198,75 @@ Prioritize channels in this order (based on effectiveness research):
 - Email address (if visible)
 - Note any limitations (e.g., "Contact form has no subject field")
 
-### Step 8: Save Output to JSON
+### Step 8: Save to Convex via HTTP API
 
-After generating all output sections, save a structured JSON file:
+Save the pitch to Convex using the HTTP API (see CLAUDE.md for full API reference).
 
-1. **Create filename**: Convert company name to slug + current timestamp
-   - Example: "Fairfax Launderette" → `fairfax-launderette_2026-01-16T14-30-00Z.json`
-   - Slug rules: lowercase, replace spaces with hyphens, remove special characters
-   - **Timestamp format**: `YYYY-MM-DDTHH-MM-SSZ` (use hyphens instead of colons for cross-platform compatibility)
+**POST to:** `https://flippant-dodo-971.convex.site/api/pitch`
 
-2. **Set generatedAt timestamp**: Use full ISO 8601 format with time
-   - Example: `"generatedAt": "2026-01-16T14:30:00Z"`
-   - **Must include time**, not just date
+**Request body:**
+```json
+{
+  "companyName": "Business Name",
+  "owner": "Owner Name or null",
+  "website": "https://example.com",
+  "industry": "Laundry Services",
+  "isLocal": true,
+  "location": {
+    "address": "123 Main St",
+    "city": "Southend-on-Sea",
+    "area": "Essex"
+  },
+  "contact": {
+    "phone": "01234567890",
+    "email": "info@example.com",
+    "form": "https://example.com/contact",
+    "facebook": "https://facebook.com/example"
+  },
+  "services": [
+    { "name": "Wash & Fold", "price": "£12/load" }
+  ],
+  "painPoints": ["Pain point 1", "Pain point 2"],
+  "pitchOptions": [
+    {
+      "angle": "pain-point",
+      "subjectLine": "Subject line",
+      "message": "Full pitch message",
+      "wordCount": 68
+    }
+  ],
+  "recommendedPitch": 0,
+  "recommendedPitchReason": "Reason for recommendation",
+  "recommendedChannel": "Email",
+  "outreach": {
+    "primaryChannel": "Email",
+    "primaryLink": "info@example.com",
+    "recommendedSubjectLine": "Subject line",
+    "reasoning": "Why this channel",
+    "alternatives": [
+      { "channel": "Facebook", "link": "https://facebook.com/example", "note": "Active page" }
+    ]
+  },
+  "sources": [
+    { "page": "Homepage", "url": "https://example.com", "found": "What was found" }
+  ],
+  "customInstructions": "Any custom instructions or null"
+}
+```
 
-3. **Write to**: `pitches/{filename}.json`
-   - Create the `pitches/` folder if it doesn't exist
+**Example WebFetch call:**
+```
+WebFetch POST https://flippant-dodo-971.convex.site/api/pitch
+Body: { "companyName": "...", "website": "...", ... }
+Prompt: "Return the full JSON response"
+```
 
-4. **Confirm save**: Display the saved file path in the "💾 Saved" output section
+**Response handling:**
+- `201`: Success - extract `pitchId` and `prospectId` (if linked) from response
+- `400`: Validation error - report the message to user
+- `409`: Duplicate pitch exists - report the existing pitch ID to user
 
-**JSON structure**: See `JSON_SCHEMA.md` for full schema documentation.
+**Auto-linking:** The API automatically links the pitch to an existing prospect if the website URL matches.
 
 ---
 
@@ -346,9 +394,11 @@ List all sources used during research with clickable links:
 
 ---
 
-### 💾 Saved
+### 💾 Saved to Convex
 
-**File:** `pitches/{company-slug}_{YYYY-MM-DDTHH-MM-SSZ}.json`
+**Pitch ID:** `[pitchId]`
+**Linked Prospect:** `[prospectId if linked, or "None - standalone pitch"]`
+**Dashboard:** https://dashboard.convex.dev/d/flippant-dodo-971
 
 ---
 
@@ -369,7 +419,7 @@ List all sources used during research with clickable links:
     - This creates peer credibility (business owner to business owner)
     - Check CLAUDE.md for sender name and local areas
 11. **Channel Recommendations**: Always recommend the most effective outreach channel with direct links. Prioritize email > LinkedIn > contact form > social > phone.
-12. **JSON Export**: Always save output to `pitches/` folder as JSON. Use company slug + timestamp for filename (e.g., `fairfax-launderette_2026-01-16T14-30-00Z.json`).
+12. **Convex Storage**: Always save output to Convex via the HTTP API. The API auto-links to existing prospects when the URL matches.
 
 ## Error Handling
 
@@ -381,5 +431,9 @@ If critical information is missing:
 - Note what couldn't be found
 - Generate pitch with available information
 - Flag areas that need manual research
+
+If Convex API returns error:
+- Report the error message from the API response
+- If a duplicate pitch exists (409), inform user and provide the existing pitch ID
 
 ultrathink
