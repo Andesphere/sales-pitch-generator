@@ -89,54 +89,39 @@ This file contains domain expertise for generating pitches to launderettes, dry 
 
 ## Success Stories
 
-**Note:** Lead with outcomes, not features. Keep stories brief (1-2 sentences max in the actual pitch).
+**IMPORTANT:** Only use stories with verified data. Check `data/` folder for real client stats. Never fabricate or hallucinate statistics.
 
-### Story 1: The QR Code Chatbot
-> "A launderette in North London stopped missing afternoon enquiries by adding a QR code customers scan for instant answers. The owner said it's like extra help during unstaffed hours—without the wage bill."
+### Story 1: DoBrasil - The After-Hours Champion (VERIFIED)
+> "One of our clients, a laundromat called DoBrasil, captured **49% of their enquiries outside business hours**—52 conversations in 6 weeks that would have gone unanswered."
 
-**Full context (for your reference, don't include all this):**
-- Handles questions about machine settings, pricing, collection bookings
-- Particularly useful during unstaffed afternoon hours
-- Owner describes it as "an extra staff member who never takes a break"
+**Data source:** `data/chatbot-j97439msq3r4a2xgrnnfbkjt417ws3yb-2026-01-16.json`
 
-**Use when:** Target has self-service machines and hours gap
-
-### Story 2: The After-Hours Lead Capture
-> "A dry cleaner captured 23 wedding dress leads in their first month—enquiries they would have missed because they came in after hours. Several converted to high-value orders."
-
-**Full context (for your reference):**
-- Chatbot explains preservation process and gives ballpark pricing
-- Collects contact details for callback
-- Targets high-value specialist services
-
-**Use when:** Target offers specialist/high-value services
-
-### Story 3: The Collection Service Automator
-> "A wash-and-fold service cut 8-10 hours of weekly phone time by letting customers book collections themselves—postcode check, time slots, and all."
-
-**Full context (for your reference):**
-- Handles entire booking process automatically
-- Postcode check, time slot selection, garment instructions
-- Owner freed up significant admin time
-
-**Use when:** Target offers collection/delivery services
-
-### Story 4: The After-Hours Champion (DoBrasil)
-> "One of our clients, a laundromat called DoBrasil, captured **49% of their enquiries outside business hours**—52 conversations in 6 weeks that would have gone unanswered. Most came on weekends and evenings."
-
-**Full context (for your reference):**
-- Client: DoBrasil (laundromat)
-- 106 total conversations in first 6 weeks
-- 26 weekend conversations, 17 evening conversations, 9 early morning
-- WhatsApp-based assistant handling pricing, machine status, store hours
+**Full verified stats:**
+- 106 total conversations in 41 days
+- 52 after-hours (49.1%): 17 evenings, 26 weekends, 9 early morning
 - 12 leads captured (11.3% conversion rate)
+- WhatsApp-based
 
-**Use when:** Target has extended hours, busy weekends, or limited staffing coverage
+**Use when:** Target has extended hours, after-hours gap, or limited staffing
 
 **Phrasing options:**
 - **Default:** "One of our clients, a laundromat called DoBrasil, captured..."
-- **Shorter:** "A laundromat we work with captured..."
-- **Name-drop only:** "DoBrasil, one of our laundromat clients, captured..."
+- **Shorter:** "A laundromat we work with captured 49% of enquiries after hours..."
+- **Name-drop only:** "DoBrasil, one of our clients, handled 52 conversations outside business hours..."
+
+---
+
+### Generic Outcomes (No Specific Numbers)
+
+Use these when DoBrasil isn't a good match for the prospect's situation. **NEVER invent specific numbers.**
+
+> "Similar businesses report handling dozens of enquiries that would have gone to voicemail."
+
+> "Owners tell us it's like having extra help during unstaffed hours—without the wage bill."
+
+> "Customers get instant answers about pricing and hours instead of waiting until morning."
+
+**Use when:** No verified data matches the prospect's situation closely
 
 ---
 

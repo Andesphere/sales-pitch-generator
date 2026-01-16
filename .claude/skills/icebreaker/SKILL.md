@@ -9,6 +9,7 @@ allowed-tools:
   - Glob
   - Grep
   - Write
+  - mcp__exa__web_search_exa
 ---
 
 # Icebreaker - AI Chatbot Sales Pitch Generator
@@ -21,10 +22,44 @@ Transform a website URL into a ready-to-send sales pitch that demonstrates deep 
 
 ## Tool Strategy
 
-**Use native Claude Code tools only.** Do NOT use Tavily or Exa MCP tools - the native WebFetch and WebSearch tools are sufficient and cost-free.
-
+**Primary tools (use first):**
 - **WebFetch**: Primary tool for extracting page content
 - **WebSearch**: For finding reviews or additional context not on the website
+
+**Fallback for blocked sites (403 errors):**
+- **Exa (`mcp__exa__web_search_exa`)**: Use when WebFetch returns a 403 error. Works well for:
+  - Review sites (Yelp, TripAdvisor, Google Reviews)
+  - Social media (Facebook, LinkedIn, Instagram)
+  - Other sites that block direct scraping
+
+**Example Exa fallback:**
+```
+# If WebFetch to Yelp returns 403, use:
+mcp__exa__web_search_exa with query: "Business Name Location Yelp reviews"
+```
+
+Exa returns rich snippets including review counts, ratings, and review highlights that WebFetch cannot access on protected sites.
+
+## Data Integrity Rules
+
+**CRITICAL: Never fabricate or hallucinate statistics.**
+
+When including success stories or proof points in pitches:
+
+1. **Use verified data only** - Check `data/` folder for real client stats
+2. **Or use generic outcomes** - Describe benefits without specific numbers
+3. **Never invent numbers** - No fabricated stats like "23 leads", "8-10 hours saved", etc.
+
+**Verified data available:**
+- DoBrasil (laundromat): 49% after-hours, 52 conversations in 6 weeks, 12 leads
+  → Source: `data/chatbot-j97439msq3r4a2xgrnnfbkjt417ws3yb-2026-01-16.json`
+
+**Generic alternatives (when no matching data exists):**
+- "Similar businesses handle dozens of after-hours enquiries monthly"
+- "Owners report significant time savings on repetitive questions"
+- "Customers get instant answers instead of waiting until morning"
+
+**How to check:** Before using any specific number in a pitch, search the `data/` folder for a source file. If no source exists, use generic language instead.
 
 ## Custom Instructions
 

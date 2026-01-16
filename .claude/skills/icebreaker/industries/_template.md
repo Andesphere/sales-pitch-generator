@@ -54,20 +54,25 @@ This file contains domain expertise for generating pitches to [industry descript
 
 ## Success Stories
 
-### Story 1: [Descriptive Title]
+**IMPORTANT:** Only include stories with verified data. Check `data/` folder for real client stats. Never fabricate statistics.
+
+### Story 1: [Descriptive Title] (VERIFIED)
 > "[Full success story text - be specific, include outcomes]"
 
+**Data source:** `data/[filename].json` or "Generic - no specific claims"
 **Use when:** [Situation when this story is most relevant]
 
-### Story 2: [Descriptive Title]
-> "[Full success story text - be specific, include outcomes]"
+### Generic Outcomes (No Specific Numbers)
 
-**Use when:** [Situation when this story is most relevant]
+Use these when no verified data matches the prospect's situation:
 
-### Story 3: [Descriptive Title]
-> "[Full success story text - be specific, include outcomes]"
+> "[Generic outcome description without specific numbers]"
 
-**Use when:** [Situation when this story is most relevant]
+> "[Another generic benefit statement]"
+
+**Use when:** No verified data matches the prospect's situation closely
+
+**NEVER invent specific numbers. If you don't have data, be generic.**
 
 ---
 

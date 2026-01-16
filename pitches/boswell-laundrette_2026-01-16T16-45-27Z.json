@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "generatedAt": "2026-01-16T16:45:27Z",
+    "sourceUrl": "https://boswelllaundrette.com/",
+    "customInstructions": null
+  },
+  "business": {
+    "name": "Boswell Laundrette",
+    "owner": null,
+    "location": "23 Boswell Street, Bloomsbury, London, WC1N 3BW",
+    "industry": "Laundry & Dry Cleaning",
+    "website": "https://boswelllaundrette.com/",
+    "isLocal": false
+  },
+  "services": [
+    { "name": "Dry Cleaning - Ladies", "price": "From £7.50 (blouses) to £120 (specialist wedding dress)" },
+    { "name": "Dry Cleaning - Gentlemen", "price": "Shirts from £5.50, Suits from £24.95" },
+    { "name": "Laundry - Service Wash", "price": "From £22.50 per bag (up to 4kg)" },
+    { "name": "Laundry - Shirts", "price": "1 for £4.50, 5 for £18.50, 7 for £25.50" },
+    { "name": "Laundry - Duvets", "price": "£27.50-£45.50 depending on type" },
+    { "name": "Repairs & Alterations", "price": "Trouser length £25, Zip replacement £25-30" },
+    { "name": "Curtain Cleaning", "price": "Small rugs from £22.50, Removal/rehang £45" },
+    { "name": "Leather & Suede", "price": "Suede jackets £75.50, Leather coats £95.50" },
+    { "name": "Specialist Cleaning", "price": "Wedding dresses £85 (standard) to £120 (specialist)" },
+    { "name": "Corporate Services", "price": "Up to 25% off for corporate clients" },
+    { "name": "Collect & Deliver", "price": "Free over £45, 2-day turnaround or same-day express" }
+  ],
+  "operatingHours": {
+    "schedule": {
+      "monday": "8am-6:30pm",
+      "tuesday": "8am-6:30pm",
+      "wednesday": "8am-6:30pm",
+      "thursday": "8am-6:30pm",
+      "friday": "8am-6:30pm",
+      "saturday": "8am-6:30pm",
+      "sunday": "8am-6:30pm"
+    },
+    "staffedHours": "All open hours (staff always present)",
+    "gapIdentified": "No after-hours coverage - closed at 6:30pm daily, evening enquiries go unanswered"
+  },
+  "digitalPresence": {
+    "websiteQuality": "Professional design with comprehensive pricing, but services page has placeholder Lorem Ipsum text",
+    "contactMethods": ["phone", "email", "contact form", "facebook"],
+    "reviewSummary": "4.5 stars on Yelp - praised for cleanliness, friendly staff (especially Tina), efficient machines, well-maintained facilities"
+  },
+  "painPoints": [
+    "Complex pricing structure with 50+ price points - customers likely call just to get quick quotes on specialist items like wedding dresses, leather, or curtains",
+    "After-hours enquiry gap - closed at 6:30pm daily, so evening/night enquiries about collection bookings or specialist services go unanswered",
+    "Collection & Delivery friction - 'Call to arrange' model means bookings can only happen during staffed hours, inconvenient for busy professionals"
+  ],
+  "icebreaker": {
+    "subjectLines": [
+      "Your wedding dress enquiries after 6:30pm",
+      "Quick question about Boswell's collection service",
+      "26 years in Holborn—noticed something"
+    ],
+    "message": "Hi,\n\nI came across Boswell Laundrette while researching Central London laundry services—26 years in Holborn is impressive, and your reviews mention Tina by name, which says a lot about your service standards.\n\nQuick question: when someone searches \"wedding dress cleaning Holborn\" at 8pm and lands on your site, how do they get pricing or book a collection before you open the next morning?\n\nA laundromat we work with captured 49% of enquiries after hours—conversations that would have gone unanswered. Owners tell us it's like having extra help without the wage bill.\n\nWould a 10-minute chat be worth exploring whether something similar could work for Boswell?\n\nCheers,\nJorge",
+    "wordCount": 108
+  },
+  "outreach": {
+    "primaryChannel": "Email",
+    "primaryLink": "info@boswelllaundrette.com",
+    "recommendedSubjectLine": "Your wedding dress enquiries after 6:30pm",
+    "reasoning": "Direct email found on contact page allows for personalized subject line, more professional for B2B outreach, and trackable for follow-up",
+    "alternatives": [
+      { "channel": "Contact Form", "link": "https://boswelllaundrette.com/contact.html", "note": "Has service request fields, good for detailed enquiries" },
+      { "channel": "Facebook", "link": "https://www.facebook.com/boswelllaundrette", "note": "Social presence for warm follow-up" },
+      { "channel": "Phone", "link": "020 7404 1248", "note": "For direct conversation if no email response" }
+    ]
+  },
+  "sources": [
+    { "page": "Homepage", "url": "https://boswelllaundrette.com/", "found": "Company name, services overview, 26 years experience" },
+    { "page": "About", "url": "https://boswelllaundrette.com/about.html", "found": "Operating hours, USPs, business philosophy, staff always present" },
+    { "page": "Contact", "url": "https://boswelllaundrette.com/contact.html", "found": "Full address, phone, email, contact form details" },
+    { "page": "Prices", "url": "https://boswelllaundrette.com/prices.html", "found": "Complete pricing list, corporate discounts, special offers" },
+    { "page": "Collect & Deliver", "url": "https://boswelllaundrette.com/collect.html", "found": "Delivery process, free delivery threshold, turnaround times" },
+    { "page": "Web Search - Reviews", "url": "https://www.yelp.com/biz/boswell-laundrette-london-2", "found": "4.5 stars on Yelp, staff member Tina mentioned in reviews" }
+  ]
+}

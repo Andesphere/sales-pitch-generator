@@ -87,7 +87,7 @@ Lead with the outcome, not the feature.
 **GOOD (Outcome-focused):**
 - "A similar launderette stopped missing afternoon enquiries by adding a QR code assistant."
 - "The owner said it's like having extra help during unstaffed hours—without the wage bill."
-- "One launderette captured 23 wedding dress leads they would have missed."
+- "A laundromat we work with captured 49% of enquiries after hours—conversations that would have gone unanswered."
 
 ---
 

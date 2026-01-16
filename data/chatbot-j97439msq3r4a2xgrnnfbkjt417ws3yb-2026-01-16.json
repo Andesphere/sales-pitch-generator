@@ -1,0 +1,214 @@
+{
+  "chatbotId": "j97439msq3r4a2xgrnnfbkjt417ws3yb",
+  "generatedAt": "2026-01-16T16:09:14.587549Z",
+  "dateRange": {
+    "start": "2025-12-06",
+    "end": "2026-01-16",
+    "daysAnalyzed": 41
+  },
+  "metrics": {
+    "totalConversations": 106,
+    "totalMessages": 951,
+    "afterHours": {
+      "count": 52,
+      "percentage": 49.1,
+      "breakdown": {
+        "evenings": 17,
+        "weekends": 26,
+        "earlyMorning": 9
+      }
+    },
+    "questionCategories": {
+      "other": {
+        "count": 91,
+        "examples": [
+          "hola",
+          "¡Hola! Estoy interesado y me gustaría más información, por favor."
+        ],
+        "percentage": 85.8
+      },
+      "services": {
+        "count": 6,
+        "examples": [
+          "Hola holaaa quiero lavar y secar por siempre",
+          "Hola buenas tardes. Una consulta y si solo necesito secar?"
+        ],
+        "percentage": 5.7
+      },
+      "pricing": {
+        "count": 5,
+        "examples": [
+          "Hola, I paid $7,000 for 2 washes on the touch screen because it wasn’t on the ri",
+          "¡Hola! Estoy interesado y me gustaría más información, por favor. Buenos días di"
+        ],
+        "percentage": 4.7
+      },
+      "howto": {
+        "count": 2,
+        "examples": [
+          "Hola, habrá alguien en la tienda acá en Alerce? La maquina para pagar no funcion",
+          "Hola necesito ayuda"
+        ],
+        "percentage": 1.9
+      },
+      "hours": {
+        "count": 1,
+        "examples": [
+          "Hola buenas tardes, hasta ah que hora atienden 🙏"
+        ],
+        "percentage": 0.9
+      },
+      "booking": {
+        "count": 1,
+        "examples": [
+          "Hola! Hoy se encuentra abierto?"
+        ],
+        "percentage": 0.9
+      }
+    },
+    "leads": {
+      "captured": 12,
+      "conversionRate": 11.3,
+      "byType": {
+        "email": 4,
+        "phone": 3,
+        "both": 2
+      }
+    }
+  },
+  "theOneNumber": {
+    "stat": "49% of enquiries came after-hours",
+    "context": "52 conversations captured outside 9am-6pm Mon-Fri",
+    "pitchAngle": "Your chatbot handled 52 enquiries when your laundromat was closed"
+  },
+  "peakHours": {
+    "distribution": {
+      "0": 1,
+      "1": 1,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 1,
+      "7": 1,
+      "8": 6,
+      "9": 9,
+      "10": 10,
+      "11": 4,
+      "12": 12,
+      "13": 7,
+      "14": 10,
+      "15": 7,
+      "16": 7,
+      "17": 7,
+      "18": 8,
+      "19": 4,
+      "20": 2,
+      "21": 4,
+      "22": 5,
+      "23": 0
+    },
+    "peakHour": 12,
+    "quietestHour": 1
+  },
+  "sampleConversations": [
+    {
+      "sessionId": "553187609769@s.whats...",
+      "timestamp": "2025-12-08T08:55:05.579000-03:00",
+      "isAfterHours": true,
+      "afterType": "earlyMorning",
+      "category": "other",
+      "exchange": [
+        {
+          "role": "user",
+          "content": "Buen dia"
+        },
+        {
+          "role": "bot",
+          "content": "¡Buen día! 🌟 \n\n¿Cómo estás? ¿En qué puedo ayudarte hoy?"
+        },
+        {
+          "role": "user",
+          "content": "Cuál valor del lavado?"
+        },
+        {
+          "role": "bot",
+          "content": "¡Claro! Te cuento los precios 👇\n\n💰 **Lavado:** $5.000\n🔥 **Secado:** $5.000\n\nEl lavado toma aproximadamente **35 minutos** y el secado hasta **45 minutos**, así que en poco más de una hora terminas todo.\n\nAdemás, nuestras máquinas incluyen **detergente y suavizante automáticamente**, así que no neces"
+        }
+      ],
+      "outcome": "conversation_completed"
+    },
+    {
+      "sessionId": "56984006300@s.whatsa...",
+      "timestamp": "2025-12-21T17:50:16.301000-03:00",
+      "isAfterHours": true,
+      "afterType": "weekends",
+      "category": "other",
+      "exchange": [
+        {
+          "role": "user",
+          "content": "Holaa"
+        },
+        {
+          "role": "bot",
+          "content": "Somos una **lavandería de autoservicio** con máquinas modernas y de gran capacidad. ¿Qué necesitas saber? 😊\n\n💛 Te puedo contar sobre:\n- Cómo funciona\n- Precios\n- Ubicación y horarios\n- Si puedes lavar edredones o piezas grandes\n- O cualquier otra duda\n\n¿Qué te gustaría? 🧺"
+        },
+        {
+          "role": "user",
+          "content": "Estoy acá en la lavanderia"
+        },
+        {
+          "role": "user",
+          "content": "La lavadora 3 estaba llena de papel"
+        }
+      ],
+      "outcome": "conversation_completed"
+    },
+    {
+      "sessionId": "160039239217166@lid",
+      "timestamp": "2026-01-13T18:27:07.823000-03:00",
+      "isAfterHours": true,
+      "afterType": "evenings",
+      "category": "other",
+      "exchange": [
+        {
+          "role": "user",
+          "content": "Hola"
+        },
+        {
+          "role": "bot",
+          "content": "¡Hola! 👋 Bienvenido a DoBrasil Lavandería Autoservicio 🧺✨\n\n¿En qué puedo ayudarte hoy? Puedo contarte sobre:\n- 📍 Nuestras ubicación y horarios\n- 🧼 Cómo funciona nuestro servicio\n- 💳 Formas de pago\n- 🛏️ Capacidad de nuestras máquinas\n- O cualquier otra duda que tengas\n\n¡Estoy aquí para asistirte! 💛"
+        },
+        {
+          "role": "user",
+          "content": "Secadora 1 no funciona"
+        },
+        {
+          "role": "bot",
+          "content": "Entiendo, la Secadora 1 no está funcionando. 😟\n\nEsto es importante para nosotros. Te recomiendo que:\n\n**📲 Nos contactes por WhatsApp en el momento** a través del código QR que está en la pared de nuestro local. Así podremos:\n- Revisar la situación inmediatamente\n- Ayudarte a usar otra secadora mient"
+        }
+      ],
+      "outcome": "conversation_completed"
+    }
+  ],
+  "meta": {
+    "skillVersion": "1.0.0",
+    "deploymentType": "prod",
+    "businessHoursAssumed": {
+      "start": 9,
+      "end": 18,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "timezone": "America/Santiago"
+    },
+    "channelBreakdown": {
+      "whatsapp": 104,
+      "widget": 2
+    }
+  }
+}
