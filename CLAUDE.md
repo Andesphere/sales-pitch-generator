@@ -3,6 +3,7 @@
 ## Company Information
 
 **Company:** Andesphere
+**Founder:** Jorge
 **Location:** Westcliff-on-Sea, Essex, UK
 
 ## Usage Notes for Icebreaker Skill
@@ -25,10 +26,15 @@ When generating icebreakers, check if the target business is in or near Westclif
 - Tilbury
 
 **If local, add to the pitch:**
-- "I'm based in Westcliff too..."
-- "As a fellow South Essex business..."
-- "We're local to the area..."
-- End with "Happy to pop by if easier."
+- Open with local angle: "I'm based in Westcliff too..." / "As a fellow South Essex business..."
+- Include founder name + title mid-message (NOT as opening): "I'm Jorge, founder of Andesphere — we help local businesses..."
+- End with: "Happy to pop by if easier."
+- Sign off with just "Jorge" (first name only, keeps it personal)
+
+**Why this works (research-backed):**
+- Proximity psychology: "neighbor before business owner" activates trust
+- Founder-to-owner: creates peer credibility (business owners trust other business owners)
+- Combined effect: Local + Founder = strongest trust signal for SMB outreach
 
 **If not local:**
 - Skip the local angle entirely

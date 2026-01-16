@@ -1,13 +1,14 @@
 ---
 name: icebreaker
 description: Analyze a company website and generate a personalized AI chatbot sales pitch.
-argument-hint: <website-url>
+argument-hint: <website-url> [--instructions "custom instructions"]
 allowed-tools:
   - WebFetch
   - WebSearch
   - Read
   - Glob
   - Grep
+  - Write
 ---
 
 # Icebreaker - AI Chatbot Sales Pitch Generator
@@ -24,6 +25,23 @@ Transform a website URL into a ready-to-send sales pitch that demonstrates deep 
 
 - **WebFetch**: Primary tool for extracting page content
 - **WebSearch**: For finding reviews or additional context not on the website
+
+## Custom Instructions
+
+The skill accepts an optional `--instructions` flag for customizing the output:
+
+```
+/icebreaker https://example.com --instructions "focus on their delivery service"
+/icebreaker https://example.com --instructions "mention we met at the Essex business expo"
+/icebreaker https://example.com --instructions "they're expanding to a second location"
+```
+
+**How to apply custom instructions:**
+- Read the custom instructions before generating output
+- Incorporate them naturally into the pitch (don't force it if irrelevant)
+- Custom instructions can override default behavior (e.g., "skip the local angle")
+- Use them to add context you already know about the prospect
+- Display applied instructions in the output under "Custom Context Applied"
 
 ## Workflow
 
@@ -130,7 +148,37 @@ If no industry file exists:
 
 Reference: `PITCH_STRUCTURE.md`
 
-Produce two sections:
+Produce all output sections.
+
+### Step 7b: Determine Best Outreach Channel
+
+Prioritize channels in this order (based on effectiveness research):
+
+1. **Direct Email** (if found) - Best for personalized subject lines, trackable
+2. **LinkedIn** (if owner profile found) - Good for B2B, shows face
+3. **Contact Form** (if available) - Acceptable but no subject line control
+4. **Facebook Messenger** (if active page) - Good for local/SMB
+5. **Phone** (last resort for cold outreach) - Only if other channels unavailable
+
+**For each channel found, extract:**
+- Direct link (contact form URL, Facebook page URL, LinkedIn profile URL)
+- Email address (if visible)
+- Note any limitations (e.g., "Contact form has no subject field")
+
+### Step 8: Save Output to JSON
+
+After generating all output sections, save a structured JSON file:
+
+1. **Create filename**: Convert company name to slug + current date
+   - Example: "Fairfax Launderette" → `fairfax-launderette_2026-01-16.json`
+   - Slug rules: lowercase, replace spaces with hyphens, remove special characters
+
+2. **Write to**: `pitches/{filename}.json`
+   - Create the `pitches/` folder if it doesn't exist
+
+3. **Confirm save**: Display the saved file path in the "💾 Saved" output section
+
+**JSON structure**: See `JSON_SCHEMA.md` for full schema documentation.
 
 ---
 
@@ -166,6 +214,8 @@ Produce two sections:
 
 **Local Angle:** [Yes/No - check if target is near your location in CLAUDE.md]
 
+**Custom Context Applied:** [If --instructions flag was used, summarize how it was incorporated. If not used, omit this line.]
+
 ---
 
 ### 💬 Personalized Icebreaker
@@ -177,9 +227,40 @@ Produce two sections:
 
 **Message:**
 
-[Ready-to-send message following PITCH_STRUCTURE.md guidelines - 100-150 words max]
+[Ready-to-send message following this structure:]
+
+**For LOCAL prospects (check CLAUDE.md for local areas):**
+1. Opening: Lead with THEM + local angle ("I'm based in [area] too and noticed...")
+2. Pain point: Their specific problem as a question
+3. Value prop: How you help + brief proof
+4. Founder intro mid-message: "I'm [Name], founder of [Company] — we help local businesses..."
+5. CTA: Soft ask + "Happy to pop by if easier."
+6. Sign-off: First name only (keeps it personal)
+
+**For NON-LOCAL prospects:**
+1. Opening: Lead with THEM (pain point or observation)
+2. Value prop: How you help + proof
+3. CTA: Soft ask
+4. Sign-off: [Your name] or "Cheers, [Name]"
+
+[100-150 words max]
 
 **Word count:** [X words]
+
+---
+
+### 📬 Recommended Outreach
+
+**Primary Channel:** [Email / Contact Form / Facebook / LinkedIn / Phone]
+**Direct Link/Address:** [clickable link or email address]
+**Subject Line:** [Best subject line from the options above]
+
+**Why this channel:**
+- [Reasoning based on what was found - e.g., "Email found on contact page, allows for personalized subject line"]
+
+**Alternative Channels:**
+- [Channel 2]: [Link/address] - [brief note]
+- [Channel 3]: [Link/address] - [brief note]
 
 ---
 
@@ -195,6 +276,12 @@ List all sources used during research with clickable links:
 
 ---
 
+### 💾 Saved
+
+**File:** `pitches/{company-slug}_{YYYY-MM-DD}.json`
+
+---
+
 ## Important Guidelines
 
 1. **Be Specific**: Every claim must reference actual data from the website
@@ -206,6 +293,13 @@ List all sources used during research with clickable links:
 7. **Focus on Outcomes**: Lead with benefits, not features
 8. **Find the Name**: Always try to find owner/contact name before defaulting to generic salutation
 9. **Include Subject Lines**: Every pitch needs 2-3 subject line options
+10. **Sender Name Placement (LOCAL prospects only)**:
+    - NEVER open with "My name is..." or "I'm [Name], founder of..."
+    - DO include founder name + title MID-MESSAGE after establishing relevance
+    - This creates peer credibility (business owner to business owner)
+    - Check CLAUDE.md for sender name and local areas
+11. **Channel Recommendations**: Always recommend the most effective outreach channel with direct links. Prioritize email > LinkedIn > contact form > social > phone.
+12. **JSON Export**: Always save output to `pitches/` folder as JSON. Use company slug + date for filename (e.g., `fairfax-launderette_2026-01-16.json`).
 
 ## Error Handling
 
