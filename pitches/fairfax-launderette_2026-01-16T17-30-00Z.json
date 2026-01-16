@@ -1,0 +1,161 @@
+{
+  "generatedAt": "2026-01-16T17:30:00Z",
+  "company": {
+    "name": "Fairfax Launderette",
+    "owner": "Gordon",
+    "location": {
+      "address": "167 Fairmead Avenue, Westcliff-on-Sea, Essex SS0 9SD",
+      "isLocal": true,
+      "localArea": "Westcliff-on-Sea"
+    },
+    "contact": {
+      "phone": "01702 352181",
+      "email": null,
+      "contactFormUrl": "https://fairfaxlaunderette.co.uk/contact/",
+      "facebook": "https://www.facebook.com/FairfaxLaunder8/"
+    },
+    "website": "https://fairfaxlaunderette.co.uk/",
+    "industry": "Laundry & Dry Cleaning"
+  },
+  "operatingHours": {
+    "open": "8am - 8pm, 7 days",
+    "staffed": "8am - 1pm",
+    "gapHours": 7,
+    "gapDescription": "Open 12 hours but staffed only 5 hours (7 hours unstaffed daily from 1pm-8pm)"
+  },
+  "services": [
+    {
+      "name": "Collection Service",
+      "description": "Free collection and delivery within 4-5 miles, wash/dry/iron",
+      "price": null
+    },
+    {
+      "name": "Service Wash",
+      "description": "Drop-off full service laundry",
+      "price": null
+    },
+    {
+      "name": "DIY Coin-Op",
+      "description": "Self-service washing machines and dryers",
+      "price": null
+    },
+    {
+      "name": "Ironing",
+      "description": "Professional ironing of shirts, blouses, trouser pressing",
+      "price": null
+    },
+    {
+      "name": "Sports Kits",
+      "description": "Team uniform and sports clothing cleaning",
+      "price": null
+    },
+    {
+      "name": "Dry Cleaning",
+      "description": "Standard garment care",
+      "price": null
+    }
+  ],
+  "painPoints": [
+    {
+      "type": "staffing_gap",
+      "description": "7 hours unstaffed daily (1pm-8pm) when customers using self-service may need help",
+      "evidence": "Website states 'Attendant available: 8am – 1pm' while open until 8pm"
+    },
+    {
+      "type": "booking_friction",
+      "description": "Online booking form requires manual follow-up with pricing - no instant confirmation",
+      "evidence": "Booking form states 'we will contact you with a price and to give an estimated arrival time'"
+    },
+    {
+      "type": "pricing_opacity",
+      "description": "No prices listed on website - customers must call or submit form for quotes",
+      "evidence": "Checked all service pages - no pricing information found"
+    },
+    {
+      "type": "self_service_support",
+      "description": "First-time customers arriving between 1pm-8pm have no one to help with machine operation",
+      "evidence": "DIY coin-op service available during unstaffed hours"
+    }
+  ],
+  "pitches": [
+    {
+      "option": 1,
+      "angle": "Pain Point",
+      "focus": "The 7-hour staffing gap",
+      "subjectLine": "The 1pm-8pm gap at Fairfax",
+      "message": "Hi Gordon,\n\nI'm based in Westcliff too and walked past your launderette on Fairmead Avenue recently. Noticed you're open 12 hours but the attendant's only there until 1pm—that's a big window where first-timers might struggle with the machines or have questions about your service wash.\n\nI'm Jorge, co-founder of Andy—we help local businesses add an AI chatbot that handles exactly this. A laundromat we work with captured 49% of their enquiries outside staffed hours.\n\nWould a quick 10-minute chat be useful? Happy to pop by if easier.\n\nJorge",
+      "wordCount": 97
+    },
+    {
+      "option": 2,
+      "angle": "Opportunity",
+      "focus": "Capturing more collection service bookings",
+      "subjectLine": "Your collection service (quick thought)",
+      "message": "Hi Gordon,\n\nFellow Westcliff business here. I was looking at your collection service—free delivery within 5 miles is a great offer. But I noticed customers fill out a form and wait for a callback with pricing.\n\nWhat if they could get instant answers about pricing, coverage area, and turnaround times—then book straightaway, even at 7pm on a Sunday?\n\nI'm Jorge, co-founder of Andy. We help local businesses like yours add an AI assistant that handles these conversations 24/7.\n\nWorth a quick chat? Happy to pop by if easier.\n\nJorge",
+      "wordCount": 98
+    },
+    {
+      "option": 3,
+      "angle": "Social Proof",
+      "focus": "Laundromat success story (DoBrasil)",
+      "subjectLine": "What worked for another laundromat",
+      "message": "Hi Gordon,\n\nI'm based in Westcliff too—saw you've built a great reputation at Fairfax Launderette with the service wash and collection offerings.\n\nOne of our clients, a laundromat called DoBrasil, added an AI chatbot to their business. In 6 weeks, it handled 52 conversations outside business hours—49% of all their enquiries. Questions about pricing, how the machines work, whether they could wash large items.\n\nI'm Jorge, co-founder of Andy. We specialise in this exact setup for laundry businesses.\n\nCould we have a quick 10-minute call this week? Happy to pop by if easier.\n\nJorge",
+      "wordCount": 104
+    }
+  ],
+  "recommendation": {
+    "bestPitch": 1,
+    "reasoning": "The 7-hour staffing gap is concrete, specific, and undeniable. Gordon knows exactly when his attendant leaves. This creates an immediate 'aha' moment without making assumptions about lost revenue."
+  },
+  "outreach": {
+    "primaryChannel": "Contact Form",
+    "primaryLink": "https://fairfaxlaunderette.co.uk/contact/",
+    "recommendedSubjectLine": "The 1pm-8pm gap at Fairfax",
+    "reasoning": "Email address is protected/obscured on the contact page. Contact form has a subject field, allowing control over the opening hook.",
+    "alternativeChannels": [
+      {
+        "channel": "Facebook",
+        "link": "https://www.facebook.com/FairfaxLaunder8/",
+        "note": "Could send a Messenger DM, but page may have limited engagement"
+      },
+      {
+        "channel": "Phone",
+        "link": "01702 352181",
+        "note": "Available but cold calling less effective for initial contact"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "page": "Homepage",
+      "url": "https://fairfaxlaunderette.co.uk/",
+      "extracted": "Business overview, hours, services list, all page links"
+    },
+    {
+      "page": "About",
+      "url": "https://fairfaxlaunderette.co.uk/about/",
+      "extracted": "Owner name (Gordon), company description, customer testimonials reference"
+    },
+    {
+      "page": "Services",
+      "url": "https://fairfaxlaunderette.co.uk/services/",
+      "extracted": "Full service descriptions, no pricing"
+    },
+    {
+      "page": "Contact",
+      "url": "https://fairfaxlaunderette.co.uk/contact/",
+      "extracted": "Phone, address, form, staffed hours confirmation"
+    },
+    {
+      "page": "Collection Service",
+      "url": "https://fairfaxlaunderette.co.uk/services/collection-service/",
+      "extracted": "Coverage area (4-5 miles), free delivery, service details"
+    },
+    {
+      "page": "Book",
+      "url": "https://fairfaxlaunderette.co.uk/book/",
+      "extracted": "Online booking form structure, turnaround options (standard 2-3 days or same day)"
+    }
+  ],
+  "ownerNameSource": "Found 'Gordon' on About page (https://fairfaxlaunderette.co.uk/about/) in the text: 'you may even be lucky enough to catch owner Gordon playing his guitar while waiting for a load to finish'"
+}
