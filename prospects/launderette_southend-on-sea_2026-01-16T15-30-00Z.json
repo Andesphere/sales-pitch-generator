@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "generatedAt": "2026-01-16T15:30:00Z",
+    "query": {
+      "industry": "launderette",
+      "location": "Southend-on-Sea",
+      "count": 5,
+      "localOnly": false
+    },
+    "results": {
+      "totalFound": 18,
+      "afterDeduplication": 9,
+      "localCount": 7,
+      "returned": 5
+    },
+    "searchQueries": [
+      "launderette Southend-on-Sea",
+      "launderette Southend-on-Sea site:yell.com",
+      "launderette Southend-on-Sea business website",
+      "laundromat near Southend-on-Sea Essex UK"
+    ]
+  },
+  "prospects": [
+    {
+      "rank": 1,
+      "name": "Jean's Launderette",
+      "url": "https://www.jeanslaundrette.co.uk/",
+      "location": {
+        "text": "Southend-on-Sea",
+        "city": "Southend-on-Sea",
+        "isLocal": true
+      },
+      "confidence": "high",
+      "sources": ["tavily", "exa"],
+      "notes": null
+    },
+    {
+      "rank": 2,
+      "name": "Fairfax Launderette",
+      "url": "https://fairfaxlaunderette.co.uk/",
+      "location": {
+        "text": "Westcliff-on-Sea",
+        "city": "Westcliff-on-Sea",
+        "isLocal": true
+      },
+      "confidence": "high",
+      "sources": ["tavily", "exa"],
+      "notes": null
+    },
+    {
+      "rank": 3,
+      "name": "Pressing Matters Launderette",
+      "url": "https://www.pressingmatterssouthend.co.uk/",
+      "location": {
+        "text": "1378 London Road, Leigh-on-Sea, SS9 2UH",
+        "city": "Leigh-on-Sea",
+        "isLocal": true
+      },
+      "confidence": "high",
+      "sources": ["exa"],
+      "notes": null
+    },
+    {
+      "rank": 4,
+      "name": "Green Leaf Laundry",
+      "url": "https://www.greenleaflaundry.co.uk/",
+      "location": {
+        "text": "Southend-on-Sea, Essex",
+        "city": "Southend-on-Sea",
+        "isLocal": true
+      },
+      "confidence": "high",
+      "sources": ["exa"],
+      "notes": "Established since 1977, commercial focus with linen hire"
+    },
+    {
+      "rank": 5,
+      "name": "Los-Launderama",
+      "url": "https://www.los-launderama.co.uk/",
+      "location": {
+        "text": "141 Leigh Rd, Leigh-on-Sea",
+        "city": "Leigh-on-Sea",
+        "isLocal": true
+      },
+      "confidence": "high",
+      "sources": ["exa"],
+      "notes": "Fully staffed 7 days, opens 7am"
+    }
+  ]
+}
