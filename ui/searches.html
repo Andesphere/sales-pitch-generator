@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Searches - Sales Pipeline</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Sales Pipeline Dashboard</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="prospects.html">Prospects</a>
+      <a href="pitches.html">Pitches</a>
+      <a href="searches.html" class="active">Searches</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Searches</h2>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <label>Limit:</label>
+      <select id="filter-limit">
+        <option value="25">25</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+      </select>
+
+      <button id="refresh-btn">Refresh</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Industry</th>
+            <th>Location</th>
+            <th>Requested</th>
+            <th>Total Found</th>
+            <th>After Dedup</th>
+            <th>Local</th>
+            <th>Returned</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="searches-table">
+          <tr><td colspan="8"><div class="loading">Loading searches...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { fetchSearches } from './js/api.js';
+    import { formatDate, escapeHtml, formatBoolean } from './js/utils.js';
+
+    const tableBody = document.getElementById('searches-table');
+    const limitFilter = document.getElementById('filter-limit');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    // Track expanded rows
+    const expandedRows = new Set();
+
+    async function loadSearches() {
+      tableBody.innerHTML = '<tr><td colspan="8"><div class="loading">Loading searches...</div></td></tr>';
+      expandedRows.clear();
+
+      try {
+        const filters = {
+          limit: parseInt(limitFilter.value, 10),
+        };
+
+        const response = await fetchSearches(filters);
+        const searches = response.data.searches;
+
+        if (searches.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="8"><div class="empty">No searches found</div></td></tr>';
+          return;
+        }
+
+        tableBody.innerHTML = searches.map((s, index) => `
+          <tr class="expandable-row" data-index="${index}">
+            <td>${escapeHtml(s.industry)}</td>
+            <td>${escapeHtml(s.location)}</td>
+            <td>${s.count}</td>
+            <td>${s.totalFound}</td>
+            <td>${s.afterDeduplication}</td>
+            <td>${s.localCount}</td>
+            <td>${s.prospectsReturned}</td>
+            <td>${formatDate(s.createdAt)}</td>
+          </tr>
+          <tr class="expanded-content" data-index="${index}">
+            <td colspan="8">
+              <div class="detail-section">
+                <h4>Search Queries Used</h4>
+                ${s.searchQueries && s.searchQueries.length > 0 ? `
+                  <ul style="margin: 0; padding-left: 20px;">
+                    ${s.searchQueries.map(q => `<li><code>${escapeHtml(q)}</code></li>`).join('')}
+                  </ul>
+                ` : '<p>No queries recorded</p>'}
+              </div>
+              <div class="detail-section" style="margin-top: 12px;">
+                <h4>Settings</h4>
+                <p><strong>Local Only:</strong> ${s.localOnly ? 'Yes' : 'No'}</p>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+
+        // Add click handlers for expandable rows
+        document.querySelectorAll('.expandable-row').forEach(row => {
+          row.addEventListener('click', () => {
+            const index = row.dataset.index;
+            const contentRow = document.querySelector(`.expanded-content[data-index="${index}"]`);
+
+            if (expandedRows.has(index)) {
+              expandedRows.delete(index);
+              row.classList.remove('expanded');
+              contentRow.classList.remove('show');
+            } else {
+              expandedRows.add(index);
+              row.classList.add('expanded');
+              contentRow.classList.add('show');
+            }
+          });
+        });
+
+      } catch (error) {
+        console.error('Failed to load searches:', error);
+        tableBody.innerHTML = `<tr><td colspan="8"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
+      }
+    }
+
+    // Event listeners
+    refreshBtn.addEventListener('click', loadSearches);
+    limitFilter.addEventListener('change', loadSearches);
+
+    // Initial load
+    loadSearches();
+  </script>
+</body>
+</html>

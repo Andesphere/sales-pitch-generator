@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Pipeline Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Sales Pipeline Dashboard</h1>
+    <nav>
+      <a href="index.html" class="active">Dashboard</a>
+      <a href="prospects.html">Prospects</a>
+      <a href="pitches.html">Pitches</a>
+      <a href="searches.html">Searches</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Stats Overview -->
+    <div class="card">
+      <h2>Pipeline Overview</h2>
+      <div id="pipeline" class="pipeline">
+        <div class="loading">Loading stats...</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div id="total-prospects" class="stat-value">—</div>
+        <div class="stat-label">Total Prospects</div>
+      </div>
+      <div class="stat-card">
+        <div id="total-pitches" class="stat-value">—</div>
+        <div class="stat-label">Total Pitches</div>
+      </div>
+      <div class="stat-card">
+        <div id="local-pitches" class="stat-value">—</div>
+        <div class="stat-label">Local Pitches</div>
+      </div>
+      <div class="stat-card">
+        <div id="nonlocal-pitches" class="stat-value">—</div>
+        <div class="stat-label">Non-Local Pitches</div>
+      </div>
+    </div>
+
+    <!-- Industries -->
+    <div class="card">
+      <h3>Industries</h3>
+      <div id="industries" class="industry-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 16px;">
+      <div class="card">
+        <h3>Recent Prospects</h3>
+        <div id="recent-prospects">
+          <div class="loading">Loading...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Recent Pitches</h3>
+        <div id="recent-pitches">
+          <div class="loading">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { fetchStats, fetchProspects, fetchPitches } from './js/api.js';
+    import { formatDate, statusBadge, escapeHtml, truncate } from './js/utils.js';
+
+    async function loadDashboard() {
+      try {
+        // Load stats
+        const statsResponse = await fetchStats();
+        const stats = statsResponse.data;
+
+        // Update pipeline
+        const pipelineEl = document.getElementById('pipeline');
+        const prospectStats = stats.prospects;
+        const stages = ['new', 'pitched', 'contacted', 'responded', 'converted'];
+
+        pipelineEl.innerHTML = stages.map((stage, index) => `
+          <div class="pipeline-step">
+            <span class="count">${prospectStats[stage] || 0}</span>
+            <span class="label">${stage}</span>
+          </div>
+          ${index < stages.length - 1 ? '<span class="pipeline-arrow">→</span>' : ''}
+        `).join('');
+
+        // Update stat cards
+        document.getElementById('total-prospects').textContent = prospectStats.total || 0;
+        document.getElementById('total-pitches').textContent = stats.pitches.total || 0;
+        document.getElementById('local-pitches').textContent = stats.pitches.local || 0;
+        document.getElementById('nonlocal-pitches').textContent = stats.pitches.nonLocal || 0;
+
+        // Update industries
+        const industriesEl = document.getElementById('industries');
+        if (stats.pitches.industries && stats.pitches.industries.length > 0) {
+          industriesEl.innerHTML = stats.pitches.industries
+            .map(ind => `<span class="industry-tag">${escapeHtml(ind)}</span>`)
+            .join('');
+        } else {
+          industriesEl.innerHTML = '<span class="empty">No industries yet</span>';
+        }
+
+        // Load recent prospects
+        const prospectsResponse = await fetchProspects({ limit: 5 });
+        const recentProspectsEl = document.getElementById('recent-prospects');
+
+        if (prospectsResponse.data.prospects.length > 0) {
+          recentProspectsEl.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${prospectsResponse.data.prospects.map(p => `
+                  <tr>
+                    <td><a href="${escapeHtml(p.url)}" target="_blank">${escapeHtml(truncate(p.name, 30))}</a></td>
+                    <td>${statusBadge(p.status)}</td>
+                    <td>${formatDate(p.createdAt)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        } else {
+          recentProspectsEl.innerHTML = '<div class="empty">No prospects yet</div>';
+        }
+
+        // Load recent pitches
+        const pitchesResponse = await fetchPitches({ limit: 5 });
+        const recentPitchesEl = document.getElementById('recent-pitches');
+
+        if (pitchesResponse.data.pitches.length > 0) {
+          recentPitchesEl.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Company</th>
+                  <th>Industry</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${pitchesResponse.data.pitches.map(p => `
+                  <tr>
+                    <td><a href="${escapeHtml(p.website)}" target="_blank">${escapeHtml(truncate(p.companyName, 30))}</a></td>
+                    <td>${escapeHtml(p.industry || '—')}</td>
+                    <td>${formatDate(p.createdAt)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        } else {
+          recentPitchesEl.innerHTML = '<div class="empty">No pitches yet</div>';
+        }
+
+      } catch (error) {
+        console.error('Failed to load dashboard:', error);
+        document.getElementById('pipeline').innerHTML = `<div class="error">Failed to load: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

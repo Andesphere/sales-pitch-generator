@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prospects - Sales Pipeline</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Sales Pipeline Dashboard</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="prospects.html" class="active">Prospects</a>
+      <a href="pitches.html">Pitches</a>
+      <a href="searches.html">Searches</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Prospects</h2>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <label>Status:</label>
+      <select id="filter-status">
+        <option value="">All</option>
+        <option value="new">New</option>
+        <option value="pitched">Pitched</option>
+        <option value="contacted">Contacted</option>
+        <option value="responded">Responded</option>
+        <option value="converted">Converted</option>
+      </select>
+
+      <label>Local:</label>
+      <select id="filter-local">
+        <option value="">All</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+
+      <label>Limit:</label>
+      <select id="filter-limit">
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100" selected>100</option>
+        <option value="500">500</option>
+      </select>
+
+      <button id="refresh-btn">Refresh</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Status</th>
+            <th>Local</th>
+            <th>Confidence</th>
+            <th>Sources</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="prospects-table">
+          <tr><td colspan="7"><div class="loading">Loading prospects...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { fetchProspects } from './js/api.js';
+    import { formatDate, statusBadge, confidenceBadge, escapeHtml } from './js/utils.js';
+
+    const tableBody = document.getElementById('prospects-table');
+    const statusFilter = document.getElementById('filter-status');
+    const localFilter = document.getElementById('filter-local');
+    const limitFilter = document.getElementById('filter-limit');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    async function loadProspects() {
+      tableBody.innerHTML = '<tr><td colspan="7"><div class="loading">Loading prospects...</div></td></tr>';
+
+      try {
+        const filters = {
+          status: statusFilter.value || undefined,
+          isLocal: localFilter.value || undefined,
+          limit: parseInt(limitFilter.value, 10),
+        };
+
+        const response = await fetchProspects(filters);
+        const prospects = response.data.prospects;
+
+        if (prospects.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="7"><div class="empty">No prospects found</div></td></tr>';
+          return;
+        }
+
+        tableBody.innerHTML = prospects.map(p => `
+          <tr>
+            <td>
+              <a href="${escapeHtml(p.url)}" target="_blank" rel="noopener">${escapeHtml(p.name)}</a>
+            </td>
+            <td>${escapeHtml(p.city || p.locationText || '—')}</td>
+            <td>${statusBadge(p.status)}</td>
+            <td class="${p.isLocal ? 'local-yes' : 'local-no'}">${p.isLocal ? 'Yes' : 'No'}</td>
+            <td>${confidenceBadge(p.confidence)}</td>
+            <td>${(p.sources || []).map(s => escapeHtml(s)).join(', ') || '—'}</td>
+            <td>${formatDate(p.createdAt)}</td>
+          </tr>
+        `).join('');
+
+      } catch (error) {
+        console.error('Failed to load prospects:', error);
+        tableBody.innerHTML = `<tr><td colspan="7"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
+      }
+    }
+
+    // Event listeners
+    refreshBtn.addEventListener('click', loadProspects);
+    statusFilter.addEventListener('change', loadProspects);
+    localFilter.addEventListener('change', loadProspects);
+    limitFilter.addEventListener('change', loadProspects);
+
+    // Initial load
+    loadProspects();
+  </script>
+</body>
+</html>

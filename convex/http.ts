@@ -1,36 +1,38 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { internal } from "./_generated/api";
-import { Id } from "./_generated/dataModel";
 
 const http = httpRouter();
 
-// Helper to create JSON responses
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+} as const;
+
 function jsonResponse(
   data: { success: boolean; message: string; data: unknown },
   status: number = 200
-) {
+): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    },
+    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
   });
 }
 
-// Helper to handle CORS preflight
-function corsResponse() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    },
-  });
+function corsResponse(): Response {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
+function errorResponse(error: unknown): Response {
+  const message = error instanceof Error ? error.message : "Unknown error";
+  return jsonResponse({ success: false, message: `Error: ${message}`, data: null }, 500);
+}
+
+function parseBoolean(value: string | null): boolean | undefined {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return undefined;
 }
 
 // ============================================
@@ -140,24 +142,12 @@ http.route({
         {
           success: true,
           message,
-          data: {
-            searchId,
-            prospectsCreated,
-            duplicatesSkipped: duplicateUrls.length,
-            duplicateUrls,
-          },
+          data: { searchId, prospectsCreated, duplicatesSkipped: duplicateUrls.length, duplicateUrls },
         },
         201
       );
     } catch (error) {
-      return jsonResponse(
-        {
-          success: false,
-          message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
+      return errorResponse(error);
     }
   }),
 });
@@ -262,23 +252,12 @@ http.route({
         {
           success: true,
           message: `Pitch created for ${body.companyName}.${linkedMessage}`,
-          data: {
-            pitchId,
-            prospectId: prospectId ?? null,
-            linkedToExistingProspect: !!existingProspect,
-          },
+          data: { pitchId, prospectId: prospectId ?? null, linkedToExistingProspect: !!existingProspect },
         },
         201
       );
     } catch (error) {
-      return jsonResponse(
-        {
-          success: false,
-          message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
+      return errorResponse(error);
     }
   }),
 });
@@ -300,14 +279,13 @@ http.route({
     try {
       const url = new URL(request.url);
       const status = url.searchParams.get("status");
-      const isLocal = url.searchParams.get("isLocal");
       const limit = url.searchParams.get("limit");
 
       const prospects = await ctx.runQuery(
         internal.prospects.listWithFiltersInternal,
         {
           status: status ?? undefined,
-          isLocal: isLocal === "true" ? true : isLocal === "false" ? false : undefined,
+          isLocal: parseBoolean(url.searchParams.get("isLocal")),
           limit: limit ? parseInt(limit, 10) : undefined,
         }
       );
@@ -315,20 +293,10 @@ http.route({
       return jsonResponse({
         success: true,
         message: `Found ${prospects.length} prospects`,
-        data: {
-          prospects,
-          total: prospects.length,
-        },
+        data: { prospects, total: prospects.length },
       });
     } catch (error) {
-      return jsonResponse(
-        {
-          success: false,
-          message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
+      return errorResponse(error);
     }
   }),
 });
@@ -350,7 +318,6 @@ http.route({
     try {
       const url = new URL(request.url);
       const industry = url.searchParams.get("industry");
-      const isLocal = url.searchParams.get("isLocal");
       const website = url.searchParams.get("website");
       const limit = url.searchParams.get("limit");
 
@@ -358,7 +325,7 @@ http.route({
         internal.pitches.listWithFiltersInternal,
         {
           industry: industry ?? undefined,
-          isLocal: isLocal === "true" ? true : isLocal === "false" ? false : undefined,
+          isLocal: parseBoolean(url.searchParams.get("isLocal")),
           website: website ?? undefined,
           limit: limit ? parseInt(limit, 10) : undefined,
         }
@@ -367,20 +334,10 @@ http.route({
       return jsonResponse({
         success: true,
         message: `Found ${pitches.length} pitches`,
-        data: {
-          pitches,
-          total: pitches.length,
-        },
+        data: { pitches, total: pitches.length },
       });
     } catch (error) {
-      return jsonResponse(
-        {
-          success: false,
-          message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
+      return errorResponse(error);
     }
   }),
 });
@@ -400,38 +357,57 @@ http.route({
   method: "GET",
   handler: httpAction(async (ctx) => {
     try {
-      const prospectStats = await ctx.runQuery(
-        internal.prospects.getPipelineStatsInternal,
-        {}
-      );
-      const pitchStats = await ctx.runQuery(
-        internal.pitches.getStatsInternal,
-        {}
-      );
+      const [prospectStats, pitchStats] = await Promise.all([
+        ctx.runQuery(internal.prospects.getPipelineStatsInternal, {}),
+        ctx.runQuery(internal.pitches.getStatsInternal, {}),
+      ]);
 
       return jsonResponse({
         success: true,
         message: "Pipeline stats retrieved",
-        data: {
-          prospects: prospectStats,
-          pitches: pitchStats,
-        },
+        data: { prospects: prospectStats, pitches: pitchStats },
       });
     } catch (error) {
-      return jsonResponse(
-        {
-          success: false,
-          message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
+      return errorResponse(error);
     }
   }),
 });
 
 http.route({
   path: "/api/stats",
+  method: "OPTIONS",
+  handler: httpAction(async () => corsResponse()),
+});
+
+// ============================================
+// GET /api/searches
+// Query searches with optional filters
+// ============================================
+http.route({
+  path: "/api/searches",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const url = new URL(request.url);
+      const limit = url.searchParams.get("limit");
+
+      const searches = await ctx.runQuery(internal.searches.listInternal, {
+        limit: limit ? parseInt(limit, 10) : undefined,
+      });
+
+      return jsonResponse({
+        success: true,
+        message: `Found ${searches.length} searches`,
+        data: { searches, total: searches.length },
+      });
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/searches",
   method: "OPTIONS",
   handler: httpAction(async () => corsResponse()),
 });

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitches - Sales Pipeline</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Sales Pipeline Dashboard</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="prospects.html">Prospects</a>
+      <a href="pitches.html" class="active">Pitches</a>
+      <a href="searches.html">Searches</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Pitches</h2>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <label>Industry:</label>
+      <input type="text" id="filter-industry" placeholder="e.g. Laundry">
+
+      <label>Website:</label>
+      <input type="text" id="filter-website" placeholder="https://...">
+
+      <label>Local:</label>
+      <select id="filter-local">
+        <option value="">All</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+
+      <label>Limit:</label>
+      <select id="filter-limit">
+        <option value="25">25</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+      </select>
+
+      <button id="refresh-btn">Refresh</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Industry</th>
+            <th>Location</th>
+            <th>Channel</th>
+            <th>Pitch Angle</th>
+            <th>Local</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="pitches-table">
+          <tr><td colspan="7"><div class="loading">Loading pitches...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { fetchPitches } from './js/api.js';
+    import { formatDate, escapeHtml, truncate } from './js/utils.js';
+
+    const tableBody = document.getElementById('pitches-table');
+    const industryFilter = document.getElementById('filter-industry');
+    const websiteFilter = document.getElementById('filter-website');
+    const localFilter = document.getElementById('filter-local');
+    const limitFilter = document.getElementById('filter-limit');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    // Track expanded rows
+    const expandedRows = new Set();
+
+    // Store pitches data for copy functionality
+    let pitchesData = [];
+
+    async function loadPitches() {
+      tableBody.innerHTML = '<tr><td colspan="7"><div class="loading">Loading pitches...</div></td></tr>';
+      expandedRows.clear();
+
+      try {
+        const filters = {
+          industry: industryFilter.value || undefined,
+          website: websiteFilter.value || undefined,
+          isLocal: localFilter.value || undefined,
+          limit: parseInt(limitFilter.value, 10),
+        };
+
+        const response = await fetchPitches(filters);
+        const pitches = response.data.pitches;
+        pitchesData = pitches; // Store for copy functionality
+
+        if (pitches.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="7"><div class="empty">No pitches found</div></td></tr>';
+          return;
+        }
+
+        tableBody.innerHTML = pitches.map((p, index) => {
+          const recommendedPitch = p.pitchOptions?.[p.recommendedPitch] || p.pitchOptions?.[0];
+          const location = [p.location?.city, p.location?.area].filter(Boolean).join(', ') || '—';
+
+          return `
+            <tr class="expandable-row" data-index="${index}">
+              <td>
+                <a href="${escapeHtml(p.website)}" target="_blank" rel="noopener">${escapeHtml(p.companyName)}</a>
+              </td>
+              <td>${escapeHtml(p.industry || '—')}</td>
+              <td>${escapeHtml(location)}</td>
+              <td>${escapeHtml(p.recommendedChannel || '—')}</td>
+              <td>${escapeHtml(truncate(recommendedPitch?.angle || '—', 40))}</td>
+              <td class="${p.isLocal ? 'local-yes' : 'local-no'}">${p.isLocal ? 'Yes' : 'No'}</td>
+              <td>${formatDate(p.createdAt)}</td>
+            </tr>
+            <tr class="expanded-content" data-index="${index}">
+              <td colspan="7">
+                <div class="detail-grid">
+                  ${p.owner ? `<div class="detail-section">
+                    <h4>Owner</h4>
+                    <p>${escapeHtml(p.owner)}</p>
+                  </div>` : ''}
+
+                  ${p.contact && Object.keys(p.contact).filter(k => p.contact[k]).length > 0 ? `
+                  <div class="detail-section">
+                    <h4>Contact</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                      ${p.contact.phone ? `<li>Phone: ${escapeHtml(p.contact.phone)}</li>` : ''}
+                      ${p.contact.mobile ? `<li>Mobile: ${escapeHtml(p.contact.mobile)}</li>` : ''}
+                      ${p.contact.email ? `<li>Email: <a href="mailto:${escapeHtml(p.contact.email)}">${escapeHtml(p.contact.email)}</a></li>` : ''}
+                      ${p.contact.form ? `<li>Form: <a href="${escapeHtml(p.contact.form)}" target="_blank">Contact Form</a></li>` : ''}
+                      ${p.contact.facebook ? `<li>Facebook: <a href="${escapeHtml(p.contact.facebook)}" target="_blank">FB Page</a></li>` : ''}
+                    </ul>
+                  </div>` : ''}
+
+                  ${p.outreach ? `
+                  <div class="detail-section">
+                    <h4>Outreach Strategy</h4>
+                    <p><strong>Channel:</strong> ${escapeHtml(p.outreach.primaryChannel || '—')}</p>
+                    ${p.outreach.primaryLink ? `<p><strong>Link:</strong> <a href="${escapeHtml(p.outreach.primaryLink)}" target="_blank">${escapeHtml(truncate(p.outreach.primaryLink, 50))}</a></p>` : ''}
+                    ${p.outreach.recommendedSubjectLine ? `<p><strong>Subject:</strong> ${escapeHtml(p.outreach.recommendedSubjectLine)}</p>` : ''}
+                    ${p.outreach.reasoning ? `<p><strong>Why:</strong> ${escapeHtml(p.outreach.reasoning)}</p>` : ''}
+                    ${p.outreach.alternatives && p.outreach.alternatives.length > 0 ? `
+                      <p style="margin-top: 8px;"><strong>Alternative Channels:</strong></p>
+                      <ul style="margin: 4px 0 0 0; padding-left: 20px;">
+                        ${p.outreach.alternatives.map(alt => `
+                          <li>
+                            ${escapeHtml(alt.channel)}:
+                            ${alt.link && alt.link.startsWith('http')
+                              ? `<a href="${escapeHtml(alt.link)}" target="_blank">${escapeHtml(truncate(alt.link, 40))}</a>`
+                              : escapeHtml(alt.link || '—')}
+                            ${alt.note ? ` — ${escapeHtml(alt.note)}` : ''}
+                          </li>
+                        `).join('')}
+                      </ul>
+                    ` : ''}
+                  </div>` : ''}
+
+                  ${p.painPoints && p.painPoints.length > 0 ? `
+                  <div class="detail-section">
+                    <h4>Pain Points</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                      ${p.painPoints.map(pp => `<li>${escapeHtml(pp)}</li>`).join('')}
+                    </ul>
+                  </div>` : ''}
+
+                  ${p.services && p.services.length > 0 ? `
+                  <div class="detail-section">
+                    <h4>Services</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                      ${p.services.map(s => `<li>${escapeHtml(s.name)}${s.price ? ` - ${escapeHtml(s.price)}` : ''}</li>`).join('')}
+                    </ul>
+                  </div>` : ''}
+
+                  <div class="detail-section" style="grid-column: 1 / -1;">
+                    <h4>Pitch Options</h4>
+                    ${(p.pitchOptions || []).map((opt, i) => `
+                      <div class="pitch-option ${i === p.recommendedPitch ? 'recommended' : ''}">
+                        <div class="pitch-header">
+                          <h5 class="angle">${i === p.recommendedPitch ? '★ ' : ''}${escapeHtml(opt.angle || 'Option ' + (i + 1))}</h5>
+                          <button class="copy-btn" data-pitch-index="${index}" data-option-index="${i}" title="Copy to clipboard">Copy</button>
+                        </div>
+                        <pre>${escapeHtml(opt.message || '')}</pre>
+                      </div>
+                    `).join('')}
+                    ${p.recommendedPitchReason ? `<p><strong>Why recommended:</strong> ${escapeHtml(p.recommendedPitchReason)}</p>` : ''}
+                  </div>
+
+                  ${p.sources && p.sources.length > 0 ? `
+                  <div class="detail-section">
+                    <h4>Sources</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                      ${p.sources.map(s => `<li>${escapeHtml(s.page)}: <a href="${escapeHtml(s.url)}" target="_blank">${escapeHtml(truncate(s.url, 40))}</a></li>`).join('')}
+                    </ul>
+                  </div>` : ''}
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        // Add click handlers for expandable rows
+        document.querySelectorAll('.expandable-row').forEach(row => {
+          row.addEventListener('click', () => {
+            const index = row.dataset.index;
+            const contentRow = document.querySelector(`.expanded-content[data-index="${index}"]`);
+
+            if (expandedRows.has(index)) {
+              expandedRows.delete(index);
+              row.classList.remove('expanded');
+              contentRow.classList.remove('show');
+            } else {
+              expandedRows.add(index);
+              row.classList.add('expanded');
+              contentRow.classList.add('show');
+            }
+          });
+        });
+
+        // Add click handlers for copy buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation(); // Prevent row expand/collapse
+
+            const pitchIndex = parseInt(btn.dataset.pitchIndex, 10);
+            const optionIndex = parseInt(btn.dataset.optionIndex, 10);
+            const pitch = pitchesData[pitchIndex];
+            const message = pitch?.pitchOptions?.[optionIndex]?.message || '';
+
+            try {
+              await navigator.clipboard.writeText(message);
+              const originalText = btn.textContent;
+              btn.textContent = 'Copied!';
+              btn.classList.add('copied');
+              setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('copied');
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy:', err);
+              btn.textContent = 'Failed';
+              setTimeout(() => {
+                btn.textContent = 'Copy';
+              }, 2000);
+            }
+          });
+        });
+
+      } catch (error) {
+        console.error('Failed to load pitches:', error);
+        tableBody.innerHTML = `<tr><td colspan="7"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
+      }
+    }
+
+    // Debounce utility
+    function createDebounce(fn, delay) {
+      let timer;
+      return function() {
+        clearTimeout(timer);
+        timer = setTimeout(fn, delay);
+      };
+    }
+
+    const debouncedLoad = createDebounce(loadPitches, 500);
+
+    // Event listeners
+    refreshBtn.addEventListener('click', loadPitches);
+    localFilter.addEventListener('change', loadPitches);
+    limitFilter.addEventListener('change', loadPitches);
+    industryFilter.addEventListener('input', debouncedLoad);
+    websiteFilter.addEventListener('input', debouncedLoad);
+
+    // Initial load
+    loadPitches();
+  </script>
+</body>
+</html>
