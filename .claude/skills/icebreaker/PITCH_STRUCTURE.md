@@ -342,7 +342,7 @@ First messages should be **link-free** to avoid spam filters. Build the sequence
 - Goal: Get a response
 
 **Example stat hook:**
-> "49% of one laundromat's enquiries came after-hours—52 conversations they would have missed without an AI assistant."
+> "One of our clients, a laundromat called DoBrasil, captured 49% of their enquiries outside business hours—52 conversations in 6 weeks they would have missed."
 
 ### Touch 2: The Value Add (Follow-up)
 - Share relevant blog post or case study
@@ -350,7 +350,7 @@ First messages should be **link-free** to avoid spam filters. Build the sequence
 - Reference their initial response (if any)
 
 **Example:**
-> "Wrote up how that laundromat handles after-hours questions if you're curious: [link]"
+> "Wrote up the DoBrasil case study if you're curious how they handle after-hours questions: [link]"
 
 ### Touch 3: The Demo Offer (Final Touch)
 - Offer low-friction demo
