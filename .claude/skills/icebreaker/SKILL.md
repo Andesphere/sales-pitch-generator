@@ -169,14 +169,19 @@ Prioritize channels in this order (based on effectiveness research):
 
 After generating all output sections, save a structured JSON file:
 
-1. **Create filename**: Convert company name to slug + current date
-   - Example: "Fairfax Launderette" → `fairfax-launderette_2026-01-16.json`
+1. **Create filename**: Convert company name to slug + current timestamp
+   - Example: "Fairfax Launderette" → `fairfax-launderette_2026-01-16T14-30-00Z.json`
    - Slug rules: lowercase, replace spaces with hyphens, remove special characters
+   - **Timestamp format**: `YYYY-MM-DDTHH-MM-SSZ` (use hyphens instead of colons for cross-platform compatibility)
 
-2. **Write to**: `pitches/{filename}.json`
+2. **Set generatedAt timestamp**: Use full ISO 8601 format with time
+   - Example: `"generatedAt": "2026-01-16T14:30:00Z"`
+   - **Must include time**, not just date
+
+3. **Write to**: `pitches/{filename}.json`
    - Create the `pitches/` folder if it doesn't exist
 
-3. **Confirm save**: Display the saved file path in the "💾 Saved" output section
+4. **Confirm save**: Display the saved file path in the "💾 Saved" output section
 
 **JSON structure**: See `JSON_SCHEMA.md` for full schema documentation.
 
@@ -278,7 +283,7 @@ List all sources used during research with clickable links:
 
 ### 💾 Saved
 
-**File:** `pitches/{company-slug}_{YYYY-MM-DD}.json`
+**File:** `pitches/{company-slug}_{YYYY-MM-DDTHH-MM-SSZ}.json`
 
 ---
 
@@ -299,7 +304,7 @@ List all sources used during research with clickable links:
     - This creates peer credibility (business owner to business owner)
     - Check CLAUDE.md for sender name and local areas
 11. **Channel Recommendations**: Always recommend the most effective outreach channel with direct links. Prioritize email > LinkedIn > contact form > social > phone.
-12. **JSON Export**: Always save output to `pitches/` folder as JSON. Use company slug + date for filename (e.g., `fairfax-launderette_2026-01-16.json`).
+12. **JSON Export**: Always save output to `pitches/` folder as JSON. Use company slug + timestamp for filename (e.g., `fairfax-launderette_2026-01-16T14-30-00Z.json`).
 
 ## Error Handling
 

@@ -5,9 +5,10 @@ This document defines the JSON structure for saved icebreaker pitch files.
 ## File Location & Naming
 
 - **Folder:** `pitches/` (in project root)
-- **Filename format:** `{company-slug}_{YYYY-MM-DD}.json`
+- **Filename format:** `{company-slug}_{YYYY-MM-DDTHH-MM-SSZ}.json` (full timestamp)
 - **Slug rules:** lowercase, replace spaces with hyphens, remove special characters
-- **Example:** `fairfax-launderette_2026-01-16.json`
+- **Timestamp format:** Use hyphens instead of colons in time (colons are invalid in filenames on some systems)
+- **Example:** `fairfax-launderette_2026-01-16T14-30-00Z.json`
 
 ## Full Schema
 
@@ -87,7 +88,7 @@ This document defines the JSON structure for saved icebreaker pitch files.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `generatedAt` | string (ISO 8601) | Yes | Timestamp when the pitch was generated |
+| `generatedAt` | string (ISO 8601) | Yes | Full timestamp when the pitch was generated (e.g., `2026-01-16T14:30:00Z`) - must include time, not just date |
 | `sourceUrl` | string (URL) | Yes | The original URL analyzed |
 | `customInstructions` | string \| null | No | Any custom instructions provided via `--instructions` flag |
 
