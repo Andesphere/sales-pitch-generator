@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "generatedAt": "2026-01-16T15:45:00Z",
+    "sourceUrl": "https://boswelllaundrette.com/",
+    "customInstructions": null
+  },
+  "business": {
+    "name": "Boswell Laundrette",
+    "owner": null,
+    "location": "23 Boswell Street, Bloomsbury, London, WC1N 3BW",
+    "industry": "Laundry & Dry Cleaning",
+    "website": "https://boswelllaundrette.com/",
+    "isLocal": false
+  },
+  "services": [
+    { "name": "Dry Cleaning - 2 Piece Suit", "price": "£24.95–£29.95" },
+    { "name": "Dry Cleaning - Jacket", "price": "£14.50–£19.50" },
+    { "name": "Laundry - Shirt", "price": "£4.50–£5.50" },
+    { "name": "Service Wash", "price": "From £22.50/bag" },
+    { "name": "Repairs & Alterations - Trouser Length", "price": "£25" },
+    { "name": "Repairs & Alterations - Zip Replacement", "price": "£30" },
+    { "name": "Curtain Cleaning", "price": "£17.50/kg" },
+    { "name": "Leather Jacket", "price": "£85.50" },
+    { "name": "Leather Coat", "price": "£95.50" },
+    { "name": "Wedding Dress", "price": "£85–£120" },
+    { "name": "Corporate Services", "price": "25% discount" },
+    { "name": "Collection & Delivery", "price": "Free over £45" }
+  ],
+  "operatingHours": {
+    "schedule": {
+      "monday": "8am–6:30pm",
+      "tuesday": "8am–6:30pm",
+      "wednesday": "8am–6:30pm",
+      "thursday": "8am–6:30pm",
+      "friday": "8am–6:30pm",
+      "saturday": "8am–6:30pm",
+      "sunday": "8am–6:30pm"
+    },
+    "staffedHours": "Fully staffed during opening hours",
+    "gapIdentified": "No after-hours inquiry channel—customers searching outside 8am–6:30pm cannot get instant answers"
+  },
+  "digitalPresence": {
+    "websiteQuality": "Professional, comprehensive pricing, some placeholder text on services page",
+    "contactMethods": ["phone", "email", "contact form", "facebook"],
+    "reviewSummary": "4.6/5 on Yelp (21 reviews), 4.5/5 on Google—praised for being clean, efficient, with helpful staff"
+  },
+  "painPoints": [
+    "After-Hours Inquiry Gap: Open 8am–6:30pm, but customers researching wedding dress cleaning, duvet prices, or collection service at 9pm have no way to get instant answers",
+    "Complex Pricing: 50+ line items across multiple service categories—customers likely call just for quick quotes before visiting",
+    "Collection Service Booking Friction: 'Call to arrange collection' with no online booking—customers wanting to schedule evening pickup can't do so after 6:30pm"
+  ],
+  "pitches": [
+    {
+      "angle": "pain-point",
+      "subjectLine": "Quick question about your after-hours enquiries",
+      "message": "Hi,\n\nI was looking at Boswell Laundrette's site and noticed you offer specialist services like wedding dress cleaning and leather care—the kind of things customers tend to research in the evening before committing.\n\nWith your doors closing at 6:30pm, I wondered: how do those 8pm enquirers get pricing or turnaround info before morning?\n\nA laundromat we work with captured 49% of their enquiries outside business hours—conversations that would have gone unanswered. An AI chatbot on your site could do the same: answer pricing questions, explain your collection service, and capture contact details while you're closed.\n\nWould you be open to a quick chat about how this could work for Boswell?\n\nCheers,\nJorge",
+      "wordCount": 121
+    },
+    {
+      "angle": "opportunity",
+      "subjectLine": "Turning your website visitors into booked collections",
+      "message": "Hi,\n\n26 years in Bloomsbury—that's impressive. Looking at your site, I noticed you offer collection and delivery across London, but customers need to call to arrange it.\n\nHere's an opportunity: people searching for 'laundry collection Bloomsbury' at 9pm are ready to book, but there's no way for them to do that until tomorrow. Some will book elsewhere.\n\nAn AI chatbot could take collection requests 24/7, answer pricing questions from your 50+ services, and hand you a list of warm leads each morning. Similar laundry businesses capture dozens of extra enquiries monthly this way.\n\nInterested in a quick conversation about how this might fit?\n\nCheers,\nJorge",
+      "wordCount": 114
+    },
+    {
+      "angle": "social-proof",
+      "subjectLine": "What your Yelp reviewers are telling me",
+      "message": "Hi,\n\nYour 4.6 stars on Yelp caught my attention—customers love that Boswell is 'clean,' 'efficient,' and that staff are helpful. That last bit is key.\n\nBut you can't staff the phone at midnight when someone's researching wedding dress cleaning before their big day. A laundromat we work with, DoBrasil, solved this with an AI chatbot—52 after-hours conversations in 6 weeks, nearly half their total enquiries.\n\nThe chatbot answers like your helpful team would: explaining specialist services, quoting prices from your list, and capturing leads while you're closed.\n\nFancy a quick chat about bringing that 'helpful' reputation online 24/7?\n\nCheers,\nJorge",
+      "wordCount": 111
+    }
+  ],
+  "recommendedPitch": {
+    "index": 2,
+    "reason": "The social proof angle leverages Boswell's strong reviews (4.6 stars, praised for helpful staff) which signals they value customer service. Pairing this with verified DoBrasil stats creates credibility, and the 'helpful staff → helpful chatbot' narrative is a natural bridge."
+  },
+  "outreach": {
+    "primaryChannel": "Email",
+    "primaryLink": "info@boswelllaundrette.com",
+    "recommendedSubjectLine": "What your Yelp reviewers are telling me",
+    "reasoning": "Email allows a personalised subject line (contact forms often don't), professional B2B norm for service businesses, and trackable open/reply rates",
+    "alternatives": [
+      { "channel": "Contact Form", "link": "https://boswelllaundrette.com/contact.html", "note": "Backup if email bounces, no subject line control" },
+      { "channel": "Facebook", "link": "https://www.facebook.com/boswelllaundrette", "note": "Good for follow-up or if no email response" },
+      { "channel": "Phone", "link": "020 7404 1248", "note": "Last resort for warm follow-up" }
+    ]
+  },
+  "sources": [
+    { "page": "Homepage", "url": "https://boswelllaundrette.com/", "found": "Company overview, service categories, 26 years experience" },
+    { "page": "About", "url": "https://boswelllaundrette.com/about.html", "found": "26 years experience, customer philosophy, staffed hours, same-day express" },
+    { "page": "Prices", "url": "https://boswelllaundrette.com/prices.html", "found": "Full pricing across all services (50+ items)" },
+    { "page": "Contact", "url": "https://boswelllaundrette.com/contact.html", "found": "Address, hours (8am–6:30pm), phone, email" },
+    { "page": "Collect & Deliver", "url": "https://boswelllaundrette.com/collect.html", "found": "Collection service details, £45 minimum for free delivery" },
+    { "page": "Corporate Services", "url": "https://boswelllaundrette.com/corp.html", "found": "B2B offering, 25% discount for corporate accounts" },
+    { "page": "Yelp Reviews", "url": "https://www.yelp.co.uk/biz/boswell-laundrette-london-2", "found": "4.6/5 stars, 21 reviews, praised for clean/efficient/helpful" },
+    { "page": "All In London", "url": "https://www.allinlondon.co.uk/directory/launderettes/106099-boswell-laundrette", "found": "Third-party listing with hours" }
+  ]
+}

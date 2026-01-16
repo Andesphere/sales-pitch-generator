@@ -1,0 +1,136 @@
+{
+  "generatedAt": "2026-01-16T14:30:00Z",
+  "company": {
+    "name": "Boswell Laundrette",
+    "website": "https://boswelllaundrette.com/",
+    "location": {
+      "address": "23 Boswell Street, Bloomsbury, London, WC1N 3BW",
+      "area": "Bloomsbury, Holborn",
+      "city": "London",
+      "country": "UK"
+    },
+    "contact": {
+      "phone": "020 7404 1248",
+      "email": "info@boswelllaundrette.com"
+    },
+    "ownerName": null,
+    "ownerNameSource": null,
+    "yearsInBusiness": 27,
+    "industry": "Laundry & Dry Cleaning"
+  },
+  "operatingHours": {
+    "regular": {
+      "monday": "8:00 AM - 8:00 PM",
+      "tuesday": "8:00 AM - 8:00 PM",
+      "wednesday": "8:00 AM - 8:00 PM",
+      "thursday": "8:00 AM - 8:00 PM",
+      "friday": "8:00 AM - 8:00 PM",
+      "saturday": "8:00 AM - 8:00 PM",
+      "sunday": "8:00 AM - 8:00 PM"
+    },
+    "notes": "Closed on Bank Holidays. Website says 8am-6:30pm but Yelp shows 8am-8pm",
+    "staffedHours": "Unknown - professional staff available on-site",
+    "gapIdentified": "12-hour daily operation with complex service menu"
+  },
+  "services": [
+    {"name": "Dry Cleaning", "priceRange": "£5.50 - £120"},
+    {"name": "Laundry", "priceRange": "£2.50 - £45.50"},
+    {"name": "Repairs & Alterations", "priceRange": "£20 - £50"},
+    {"name": "Leather & Suede Cleaning", "priceRange": "£65.50 - £95.50"},
+    {"name": "Curtain Cleaning", "price": "£17.50/kg"},
+    {"name": "Service Wash", "price": "From £22.50/bag (up to 4kg)"},
+    {"name": "Shirt Service", "price": "£4.50 each or 5 for £18.50"},
+    {"name": "Collect & Deliver", "price": "Free over £45"},
+    {"name": "Corporate Services", "discount": "Up to 25% off"}
+  ],
+  "uniqueSellingPoints": [
+    "27 years of experience in Central London",
+    "Express same-day cleaning including Sundays",
+    "Industrial-grade equipment with high-speed spin cycles",
+    "Collect & Deliver service across Central London",
+    "ECO friendly wet-cleaning",
+    "Corporate services with 25% discount",
+    "Open 7 days a week"
+  ],
+  "digitalPresence": {
+    "website": "Professional, comprehensive pricing, service request form",
+    "socialMedia": {
+      "facebook": "https://www.facebook.com/boswelllaundrette"
+    },
+    "reviews": {
+      "yelp": {
+        "rating": 4.6,
+        "reviewCount": 21
+      },
+      "google": {
+        "rating": 4.5,
+        "source": "YouTube review video"
+      }
+    },
+    "contactMethods": ["Phone", "Email", "Contact Form", "Facebook"]
+  },
+  "painPoints": [
+    {
+      "issue": "Complex service menu overwhelms enquiries",
+      "evidence": "8 service categories with 50+ pricing tiers create repetitive questions",
+      "chatbotOpportunity": "Instant service recommendations and accurate quotes"
+    },
+    {
+      "issue": "Collect & Deliver booking friction",
+      "evidence": "Currently requires phone call or form submission, no instant booking",
+      "chatbotOpportunity": "24/7 collection scheduling and order tracking"
+    },
+    {
+      "issue": "After-hours enquiries going unanswered",
+      "evidence": "12-hour operation but enquiries likely come outside business hours",
+      "chatbotOpportunity": "Capture evening and weekend enquiries automatically"
+    },
+    {
+      "issue": "Corporate client onboarding",
+      "evidence": "Corporate services offered but no self-serve info request",
+      "chatbotOpportunity": "Qualify corporate leads and schedule consultations automatically"
+    }
+  ],
+  "pitch": {
+    "subjectLines": [
+      "Quick Q about Boswell's collect & deliver",
+      "27 years in Holborn — one upgrade missing?",
+      "Saw your 4.6★ on Yelp"
+    ],
+    "message": "Hi,\n\nI was looking at Boswell Laundrette's pricing page — impressive range, from £4.50 shirt service up to wedding dresses and leather care.\n\nWith that many options, do you find customers often call or email just to ask \"what's this going to cost?\" or \"do you collect from my area?\"\n\nI work with laundry businesses to add a simple AI chatbot that handles those questions 24/7 — instant quotes, collection bookings, even corporate enquiries. Similar businesses see dozens of after-hours conversations each month that would otherwise go unanswered.\n\nWorth a quick chat to see if it fits?\n\nCheers,\nJorge",
+    "wordCount": 98
+  },
+  "outreach": {
+    "primaryChannel": "Email",
+    "primaryAddress": "info@boswelllaundrette.com",
+    "recommendedSubject": "Quick Q about Boswell's collect & deliver",
+    "reasoning": "Direct email found on contact page allows personalized subject line and is more professional for a B2B approach to an established 27-year business",
+    "alternativeChannels": [
+      {
+        "channel": "Contact Form",
+        "link": "https://boswelllaundrette.com/contact.html",
+        "note": "Service request form available but designed for laundry orders, not sales enquiries"
+      },
+      {
+        "channel": "Facebook",
+        "link": "https://www.facebook.com/boswelllaundrette",
+        "note": "Active page, good for casual follow-up"
+      },
+      {
+        "channel": "Phone",
+        "link": "020 7404 1248",
+        "note": "Direct line available but interrupts busy operation"
+      }
+    ]
+  },
+  "localAngle": false,
+  "sources": [
+    {"page": "Homepage", "url": "https://boswelllaundrette.com/", "found": "Site structure, services overview, 26+ years experience"},
+    {"page": "Contact", "url": "https://boswelllaundrette.com/contact.html", "found": "Address, phone, email, hours, service request form"},
+    {"page": "About", "url": "https://boswelllaundrette.com/about.html", "found": "Company values, USPs, express same-day service"},
+    {"page": "Services", "url": "https://boswelllaundrette.com/services.html", "found": "Full service list"},
+    {"page": "Prices", "url": "https://boswelllaundrette.com/prices.html", "found": "Complete pricing, discounts, corporate rates"},
+    {"page": "Collect & Deliver", "url": "https://boswelllaundrette.com/collect.html", "found": "Delivery details, booking process, free delivery threshold"},
+    {"page": "Yelp", "url": "https://www.yelp.co.uk/biz/boswell-laundrette-london-2", "found": "4.6 stars, 21 reviews, 8am-8pm hours, eco-friendly mention"}
+  ]
+}

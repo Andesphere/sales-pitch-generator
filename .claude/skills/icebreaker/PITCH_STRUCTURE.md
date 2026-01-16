@@ -2,6 +2,48 @@
 
 This document defines how to craft compelling, personalized icebreaker messages for AI chatbot sales outreach.
 
+## Three Pitch Angles
+
+Every icebreaker analysis generates **3 distinct pitches**, each using a different strategic angle:
+
+| # | Angle | Focus | Best When |
+|---|-------|-------|-----------|
+| 1 | **Pain Point** | Lead with their biggest operational problem | Clear gap identified (hours, staffing, process friction) |
+| 2 | **Opportunity** | Lead with growth/revenue potential | Business shows expansion signs, underutilized digital presence |
+| 3 | **Social Proof** | Lead with industry success story or their own reviews | Strong reviews exist OR verified case study matches their industry |
+
+### Pain Point Angle
+- Opens with a specific operational problem observed on their site
+- Uses question-based framing ("Do customers ever get stuck...?")
+- Most effective when there's a clear, quantifiable gap (e.g., "open 12 hours, staffed 5")
+
+**Example hook:** "Fairfax Launderette is open until 8pm, but your attendant finishes at 1pm—that's 7 hours of self-service only."
+
+### Opportunity Angle
+- Opens with untapped potential or growth opportunity
+- Focuses on what they could gain, not what they're losing
+- Most effective for businesses showing growth intent (new locations, expanding services)
+
+**Example hook:** "Your 5-mile free collection radius is a great differentiator—are you capturing those enquiries when you're not at the desk?"
+
+### Social Proof Angle
+- Opens with a relevant success story or leverages their own positive reviews
+- Builds credibility through third-party validation
+- Most effective when you have verified data matching their industry OR they have strong reviews to reference
+
+**Example hook:** "A laundromat we work with captured 49% of enquiries after hours—52 conversations in 6 weeks they would have missed."
+
+### Choosing the Recommended Pitch
+
+After generating all 3 pitches, select the best fit based on:
+
+1. **Evidence strength**: Which angle has the strongest supporting data from their website?
+2. **Verified data availability**: Do you have matching industry case study data?
+3. **Business signals**: Is the prospect showing growth intent or pain signals?
+4. **Local angle**: If local, all angles benefit from proximity—but pain point + local is often strongest
+
+---
+
 ## The HRPSC Framework
 
 Every effective icebreaker follows this structure:

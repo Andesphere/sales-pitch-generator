@@ -258,34 +258,64 @@ After generating all output sections, save a structured JSON file:
 
 ---
 
-### 💬 Personalized Icebreaker
+### 💬 Pitch Option 1: Pain Point Angle
+**Focus:** Lead with their biggest operational problem
 
-**Subject Line Options:**
-1. [Problem-focused option]
-2. [Curiosity option]
-3. [Specific + short option]
+**Subject Line:** [Problem-focused subject]
 
 **Message:**
+[Ready-to-send message that opens with a specific pain point observed on their site]
 
-[Ready-to-send message following this structure:]
+**Word count:** X words
+
+---
+
+### 💬 Pitch Option 2: Opportunity Angle
+**Focus:** Lead with growth/revenue potential
+
+**Subject Line:** [Opportunity-focused subject]
+
+**Message:**
+[Ready-to-send message that opens with untapped potential or growth opportunity]
+
+**Word count:** X words
+
+---
+
+### 💬 Pitch Option 3: Social Proof Angle
+**Focus:** Lead with industry success story or reviews
+
+**Subject Line:** [Social-proof-focused subject]
+
+**Message:**
+[Ready-to-send message that opens with a relevant success story or leverages their own reviews]
+
+**Word count:** X words
+
+---
+
+### 🎯 Recommended Pitch
+**Best fit:** Option [X] — [Reason based on prospect's profile, e.g., "Strong hours gap identified makes pain point angle most compelling"]
+
+---
+
+**Message Structure Guidelines:**
 
 **For LOCAL prospects (check CLAUDE.md for local areas):**
 1. Opening: Lead with THEM + local angle ("I'm based in [area] too and noticed...")
-2. Pain point: Their specific problem as a question
+2. Pain point/Opportunity/Proof: Angle-specific hook
 3. Value prop: How you help + brief proof
-4. Founder intro mid-message: "I'm [Name], founder of [Company] — we help local businesses..."
+4. Founder intro mid-message: "I'm [Name], co-founder of Andy — we help local businesses..."
 5. CTA: Soft ask + "Happy to pop by if easier."
 6. Sign-off: First name only (keeps it personal)
 
 **For NON-LOCAL prospects:**
-1. Opening: Lead with THEM (pain point or observation)
+1. Opening: Lead with THEM (angle-specific hook)
 2. Value prop: How you help + proof
 3. CTA: Soft ask
 4. Sign-off: [Your name] or "Cheers, [Name]"
 
-[100-150 words max]
-
-**Word count:** [X words]
+**All pitches:** 100-150 words max
 
 ---
 
@@ -351,3 +381,5 @@ If critical information is missing:
 - Note what couldn't be found
 - Generate pitch with available information
 - Flag areas that need manual research
+
+ultrathink
