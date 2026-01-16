@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-16",
+    "source_url": "https://boswelllaundrette.com",
+    "skill_version": "1.0"
+  },
+  "company": {
+    "name": "Boswell Laundrette",
+    "owner_contact": null,
+    "location": {
+      "address": "23 Boswell Street, Bloomsbury, London, WC1N 3BW",
+      "area": "Bloomsbury",
+      "city": "London",
+      "is_local": false
+    },
+    "industry": "Laundry & Dry Cleaning",
+    "years_in_business": 26,
+    "website": "https://boswelllaundrette.com"
+  },
+  "services": [
+    { "name": "Service wash", "price": "from £22.50/bag (up to 4kg)" },
+    { "name": "Dry cleaning", "price": "£5.50-£120" },
+    { "name": "Shirt service (single)", "price": "£4.50" },
+    { "name": "Shirt service (5 shirts)", "price": "£18.50" },
+    { "name": "Shirt service (7 shirts)", "price": "£25.50" },
+    { "name": "Repairs & alterations", "price": "£20-£50" },
+    { "name": "Leather/suede cleaning", "price": "£65.50-£95.50" },
+    { "name": "Curtains", "price": "£17.50/kg" },
+    { "name": "Collection & delivery", "price": "Free over £45" }
+  ],
+  "operations": {
+    "hours": "Monday-Sunday: 8am-6:30pm",
+    "staffed_hours": "All opening hours (staff on-site)",
+    "closed": "Bank Holidays",
+    "hours_gap": "Closed 6:30pm-8am - evening enquiries unanswered"
+  },
+  "digital_presence": {
+    "website_quality": "Professional, Wix-based",
+    "contact_methods": ["Phone", "Email", "Contact form"],
+    "reviews": {
+      "platform": "Yelp",
+      "rating": 4.5,
+      "count": 26
+    }
+  },
+  "pain_points": [
+    {
+      "type": "after_hours_enquiries",
+      "evidence": "Closed at 6:30pm - customers searching evenings can't get info",
+      "priority": "high"
+    },
+    {
+      "type": "booking_friction",
+      "evidence": "Collection booking requires call or form - no instant confirmation",
+      "priority": "medium"
+    },
+    {
+      "type": "pricing_complexity",
+      "evidence": "Services range £2.50-£120, customers likely call for quotes",
+      "priority": "medium"
+    }
+  ],
+  "pitch": {
+    "subject_lines": [
+      "Question about evening enquiries",
+      "Handling quotes after 6:30pm?",
+      "Boswell + collection bookings"
+    ],
+    "message": "Hi,\n\nBoswell Laundrette has been serving Bloomsbury for 26 years—impressive longevity in central London.\n\nDo you ever miss enquiries from people searching for dry cleaners or service washes after you close at 6:30pm? Research shows **49% of laundry enquiries come outside business hours**—evenings and weekends especially.\n\nA similar launderette added a WhatsApp assistant that handles pricing questions and collection bookings around the clock—no phone tag, no waiting for form responses.\n\nWorth exploring?",
+    "word_count": 78,
+    "local_angle_used": false,
+    "story_used": "Story 4: The After-Hours Champion"
+  },
+  "outreach": {
+    "primary_channel": "Email",
+    "primary_contact": "info@boswelllaundrette.com",
+    "recommended_subject": "Question about evening enquiries",
+    "alternative_channels": [
+      { "channel": "Contact Form", "url": "https://boswelllaundrette.com/contact.html" },
+      { "channel": "Facebook", "url": "https://www.facebook.com/boswelllaundrette" },
+      { "channel": "Phone", "number": "020 7404 1248" }
+    ]
+  },
+  "sources": [
+    { "page": "Homepage", "url": "https://boswelllaundrette.com/", "found": "Company overview, services list" },
+    { "page": "Contact Page", "url": "https://boswelllaundrette.com/contact.html", "found": "Address, hours, phone, email" },
+    { "page": "Prices Page", "url": "https://boswelllaundrette.com/prices.html", "found": "Full pricing structure" },
+    { "page": "About Page", "url": "https://boswelllaundrette.com/about.html", "found": "26 years experience, USPs" },
+    { "page": "Collection & Delivery", "url": "https://boswelllaundrette.com/collect.html", "found": "Booking process, coverage" }
+  ]
+}

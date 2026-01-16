@@ -121,6 +121,17 @@ This file contains domain expertise for generating pitches to launderettes, dry 
 
 **Use when:** Target offers collection/delivery services
 
+### Story 4: The After-Hours Champion
+> "A laundromat captured **49% of their enquiries outside business hours**—52 conversations in 6 weeks that would have gone unanswered. Most came on weekends and evenings."
+
+**Full context (for your reference):**
+- 106 total conversations in first 6 weeks
+- 26 weekend conversations, 17 evening conversations, 9 early morning
+- WhatsApp-based assistant handling pricing, machine status, store hours
+- 12 leads captured (11.3% conversion rate)
+
+**Use when:** Target has extended hours, busy weekends, or limited staffing coverage
+
 ---
 
 ## Industry Terminology

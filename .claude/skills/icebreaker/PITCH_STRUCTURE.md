@@ -329,3 +329,37 @@ Worth a quick chat? Happy to pop by if easier.
 **Local angle:** Yes
 **Question-based pain point:** Yes
 **Micro-CTA with local option:** Yes
+
+---
+
+## Multi-Touch Outreach Strategy
+
+First messages should be **link-free** to avoid spam filters. Build the sequence across touches:
+
+### Touch 1: The Icebreaker (This Skill)
+- Lead with a compelling stat or observation
+- No links in first message
+- Goal: Get a response
+
+**Example stat hook:**
+> "49% of one laundromat's enquiries came after-hours—52 conversations they would have missed without an AI assistant."
+
+### Touch 2: The Value Add (Follow-up)
+- Share relevant blog post or case study
+- Now safe to include link
+- Reference their initial response (if any)
+
+**Example:**
+> "Wrote up how that laundromat handles after-hours questions if you're curious: [link]"
+
+### Touch 3: The Demo Offer (Final Touch)
+- Offer low-friction demo
+- Specific to their business type
+
+**Example:**
+> "Built a quick demo for launderettes—shows how the QR code flow works. Want me to send it?"
+
+### Why This Works
+- **No links in Touch 1** = bypasses spam filters
+- **Stat-first approach** = creates curiosity without selling
+- **Gradual escalation** = builds trust before asking for time
