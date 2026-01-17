@@ -159,6 +159,65 @@ http.route({
 });
 
 // ============================================
+// POST /api/prospect/status
+// Update a prospect's status
+// ============================================
+http.route({
+  path: "/api/prospect/status",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+
+      // Validate required fields
+      if (!body.prospectId || !body.status) {
+        return jsonResponse(
+          {
+            success: false,
+            message: "Validation error: 'prospectId' and 'status' are required",
+            data: null,
+          },
+          400
+        );
+      }
+
+      // Validate status is one of the allowed values
+      const validStatuses = ["new", "pitched", "contacted", "responded", "converted"];
+      if (!validStatuses.includes(body.status)) {
+        return jsonResponse(
+          {
+            success: false,
+            message: `Validation error: 'status' must be one of: ${validStatuses.join(", ")}`,
+            data: null,
+          },
+          400
+        );
+      }
+
+      // Update the prospect status
+      await ctx.runMutation(internal.prospects.updateStatusInternal, {
+        id: body.prospectId,
+        status: body.status,
+      });
+
+      return jsonResponse({
+        success: true,
+        message: `Prospect status updated to '${body.status}'`,
+        data: { prospectId: body.prospectId, status: body.status },
+      });
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/prospect/status",
+  method: "OPTIONS",
+  handler: httpAction(async () => corsResponse()),
+});
+
+// ============================================
 // POST /api/pitch
 // Creates a pitch and links to existing prospect
 // ============================================

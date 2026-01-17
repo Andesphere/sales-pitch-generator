@@ -110,7 +110,11 @@ export const listWithFiltersInternal = internalQuery({
         .query("pitches")
         .withIndex("by_website", (q) => q.eq("website", args.website!))
         .first();
-      return pitch ? [pitch] : [];
+      if (!pitch) return [];
+
+      // Look up linked prospect to get status
+      const prospect = pitch.prospectId ? await ctx.db.get(pitch.prospectId) : null;
+      return [{ ...pitch, prospectStatus: prospect?.status ?? null }];
     }
 
     let query = ctx.db.query("pitches");
@@ -138,9 +142,18 @@ export const listWithFiltersInternal = internalQuery({
 
     // Apply limit
     if (args.limit !== undefined) {
-      return filtered.slice(0, args.limit);
+      filtered = filtered.slice(0, args.limit);
     }
-    return filtered;
+
+    // Look up linked prospects to get status for each pitch
+    const pitchesWithStatus = await Promise.all(
+      filtered.map(async (pitch) => {
+        const prospect = pitch.prospectId ? await ctx.db.get(pitch.prospectId) : null;
+        return { ...pitch, prospectStatus: prospect?.status ?? null };
+      })
+    );
+
+    return pitchesWithStatus;
   },
 });
 

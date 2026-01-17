@@ -63,3 +63,15 @@ export async function fetchPitches(filters = {}) {
 export async function fetchSearches(filters = {}) {
   return apiFetch('/api/searches', { params: filters });
 }
+
+/**
+ * Update a prospect's status
+ * @param {string} prospectId - Prospect ID
+ * @param {string} status - New status (new, pitched, contacted, responded, converted)
+ */
+export async function updateProspectStatus(prospectId, status) {
+  return apiFetch('/api/prospect/status', {
+    method: 'POST',
+    body: { prospectId, status },
+  });
+}

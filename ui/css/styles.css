@@ -431,6 +431,41 @@ a:hover {
   border-color: var(--color-success);
 }
 
+/* Status cell */
+.status-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mark-contacted-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  background: var(--color-card);
+  border: 1px solid var(--badge-contacted);
+  color: var(--badge-contacted);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mark-contacted-btn:hover {
+  background: var(--badge-contacted);
+  color: white;
+}
+
+.mark-contacted-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
 /* Industry list */
 .industry-list {
   display: flex;

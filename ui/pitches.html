@@ -56,19 +56,20 @@
             <th>Channel</th>
             <th>Pitch Angle</th>
             <th>Local</th>
+            <th>Status</th>
             <th>Created</th>
           </tr>
         </thead>
         <tbody id="pitches-table">
-          <tr><td colspan="7"><div class="loading">Loading pitches...</div></td></tr>
+          <tr><td colspan="8"><div class="loading">Loading pitches...</div></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <script type="module">
-    import { fetchPitches } from './js/api.js';
-    import { formatDate, escapeHtml, truncate } from './js/utils.js';
+    import { fetchPitches, updateProspectStatus } from './js/api.js';
+    import { formatDate, escapeHtml, truncate, statusBadge } from './js/utils.js';
 
     const tableBody = document.getElementById('pitches-table');
     const industryFilter = document.getElementById('filter-industry');
@@ -84,7 +85,7 @@
     let pitchesData = [];
 
     async function loadPitches() {
-      tableBody.innerHTML = '<tr><td colspan="7"><div class="loading">Loading pitches...</div></td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="8"><div class="loading">Loading pitches...</div></td></tr>';
       expandedRows.clear();
 
       try {
@@ -100,7 +101,7 @@
         pitchesData = pitches; // Store for copy functionality
 
         if (pitches.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="7"><div class="empty">No pitches found</div></td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="8"><div class="empty">No pitches found</div></td></tr>';
           return;
         }
 
@@ -118,10 +119,18 @@
               <td>${escapeHtml(p.recommendedChannel || '—')}</td>
               <td>${escapeHtml(truncate(recommendedPitch?.angle || '—', 40))}</td>
               <td class="${p.isLocal ? 'local-yes' : 'local-no'}">${p.isLocal ? 'Yes' : 'No'}</td>
+              <td class="status-cell">
+                ${p.prospectId
+                  ? `${statusBadge(p.prospectStatus || 'unknown')}
+                     ${!['contacted', 'responded', 'converted'].includes(p.prospectStatus)
+                       ? `<button class="mark-contacted-btn" data-prospect-id="${p.prospectId}" data-index="${index}">Mark Contacted</button>`
+                       : ''}`
+                  : '<span class="text-muted">No prospect</span>'}
+              </td>
               <td>${formatDate(p.createdAt)}</td>
             </tr>
             <tr class="expanded-content" data-index="${index}">
-              <td colspan="7">
+              <td colspan="8">
                 <div class="detail-grid">
                   ${p.owner ? `<div class="detail-section">
                     <h4>Owner</h4>
@@ -253,9 +262,36 @@
           });
         });
 
+        // Add click handlers for "Mark Contacted" buttons
+        document.querySelectorAll('.mark-contacted-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation(); // Prevent row expand/collapse
+
+            const prospectId = btn.dataset.prospectId;
+            const index = parseInt(btn.dataset.index, 10);
+
+            btn.disabled = true;
+            btn.textContent = 'Updating...';
+
+            try {
+              await updateProspectStatus(prospectId, 'contacted');
+
+              // Update local data and UI
+              pitchesData[index].prospectStatus = 'contacted';
+              const statusCell = btn.closest('.status-cell');
+              statusCell.innerHTML = statusBadge('contacted');
+            } catch (err) {
+              console.error('Failed to update status:', err);
+              btn.disabled = false;
+              btn.textContent = 'Mark Contacted';
+              alert('Failed to update status: ' + err.message);
+            }
+          });
+        });
+
       } catch (error) {
         console.error('Failed to load pitches:', error);
-        tableBody.innerHTML = `<tr><td colspan="7"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
       }
     }
 
