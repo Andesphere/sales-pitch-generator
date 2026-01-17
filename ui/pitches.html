@@ -35,6 +35,16 @@
         <option value="false">No</option>
       </select>
 
+      <label class="checkbox-filter">
+        <input type="checkbox" id="filter-hide-contacted">
+        Hide Contacted
+      </label>
+
+      <label class="checkbox-filter">
+        <input type="checkbox" id="filter-hide-deleted" checked>
+        Hide Deleted
+      </label>
+
       <label>Limit:</label>
       <select id="filter-limit">
         <option value="25">25</option>
@@ -58,17 +68,18 @@
             <th>Local</th>
             <th>Status</th>
             <th>Created</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="pitches-table">
-          <tr><td colspan="8"><div class="loading">Loading pitches...</div></td></tr>
+          <tr><td colspan="9"><div class="loading">Loading pitches...</div></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <script type="module">
-    import { fetchPitches, updateProspectStatus } from './js/api.js';
+    import { fetchPitches, updateProspectStatus, deletePitch } from './js/api.js';
     import { formatDate, escapeHtml, truncate, statusBadge } from './js/utils.js';
 
     const tableBody = document.getElementById('pitches-table');
@@ -76,7 +87,29 @@
     const websiteFilter = document.getElementById('filter-website');
     const localFilter = document.getElementById('filter-local');
     const limitFilter = document.getElementById('filter-limit');
+    const hideContactedFilter = document.getElementById('filter-hide-contacted');
+    const hideDeletedFilter = document.getElementById('filter-hide-deleted');
     const refreshBtn = document.getElementById('refresh-btn');
+
+    // Filter constants and localStorage keys
+    const HIDE_CONTACTED_KEY = 'hideContactedFilter';
+    const HIDE_DELETED_KEY = 'hideDeletedFilter';
+    const CONTACTED_STATUSES = ['contacted', 'responded', 'converted'];
+
+    function loadFilterPreferences() {
+      hideContactedFilter.checked = localStorage.getItem(HIDE_CONTACTED_KEY) === 'true';
+      // Default to true if not set
+      const hideDeletedValue = localStorage.getItem(HIDE_DELETED_KEY);
+      hideDeletedFilter.checked = hideDeletedValue === null ? true : hideDeletedValue === 'true';
+    }
+
+    function saveContactedFilterPreference() {
+      localStorage.setItem(HIDE_CONTACTED_KEY, hideContactedFilter.checked);
+    }
+
+    function saveDeletedFilterPreference() {
+      localStorage.setItem(HIDE_DELETED_KEY, hideDeletedFilter.checked);
+    }
 
     // Track expanded rows
     const expandedRows = new Set();
@@ -84,8 +117,23 @@
     // Store pitches data for copy functionality
     let pitchesData = [];
 
+    function renderStatusCell(pitch, index) {
+      if (!pitch.prospectId) {
+        return '<span class="text-muted">No prospect</span>';
+      }
+
+      const badge = statusBadge(pitch.prospectStatus || 'unknown');
+      const alreadyContacted = ['contacted', 'responded', 'converted'].includes(pitch.prospectStatus);
+
+      if (alreadyContacted) {
+        return badge;
+      }
+
+      return `${badge} <button class="mark-contacted-btn" data-prospect-id="${pitch.prospectId}" data-index="${index}">Mark Contacted</button>`;
+    }
+
     async function loadPitches() {
-      tableBody.innerHTML = '<tr><td colspan="8"><div class="loading">Loading pitches...</div></td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="9"><div class="loading">Loading pitches...</div></td></tr>';
       expandedRows.clear();
 
       try {
@@ -97,11 +145,22 @@
         };
 
         const response = await fetchPitches(filters);
-        const pitches = response.data.pitches;
+        let pitches = response.data.pitches;
+
+        // Apply client-side filter for contacted statuses
+        if (hideContactedFilter.checked) {
+          pitches = pitches.filter(p => !CONTACTED_STATUSES.includes(p.prospectStatus));
+        }
+
+        // Apply client-side filter for deleted
+        if (hideDeletedFilter.checked) {
+          pitches = pitches.filter(p => !p.isDeleted);
+        }
+
         pitchesData = pitches; // Store for copy functionality
 
         if (pitches.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="8"><div class="empty">No pitches found</div></td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="9"><div class="empty">No pitches found</div></td></tr>';
           return;
         }
 
@@ -110,7 +169,7 @@
           const location = [p.location?.city, p.location?.area].filter(Boolean).join(', ') || '—';
 
           return `
-            <tr class="expandable-row" data-index="${index}">
+            <tr class="expandable-row" data-index="${index}"${p.isDeleted ? ' style="opacity: 0.5;"' : ''}>
               <td>
                 <a href="${escapeHtml(p.website)}" target="_blank" rel="noopener">${escapeHtml(p.companyName)}</a>
               </td>
@@ -120,17 +179,17 @@
               <td>${escapeHtml(truncate(recommendedPitch?.angle || '—', 40))}</td>
               <td class="${p.isLocal ? 'local-yes' : 'local-no'}">${p.isLocal ? 'Yes' : 'No'}</td>
               <td class="status-cell">
-                ${p.prospectId
-                  ? `${statusBadge(p.prospectStatus || 'unknown')}
-                     ${!['contacted', 'responded', 'converted'].includes(p.prospectStatus)
-                       ? `<button class="mark-contacted-btn" data-prospect-id="${p.prospectId}" data-index="${index}">Mark Contacted</button>`
-                       : ''}`
-                  : '<span class="text-muted">No prospect</span>'}
+                ${renderStatusCell(p, index)}
               </td>
               <td>${formatDate(p.createdAt)}</td>
+              <td>
+                ${p.isDeleted
+                  ? '<span class="text-muted">Deleted</span>'
+                  : `<button class="delete-btn" data-pitch-id="${p._id}" data-index="${index}">Delete</button>`}
+              </td>
             </tr>
             <tr class="expanded-content" data-index="${index}">
-              <td colspan="8">
+              <td colspan="9">
                 <div class="detail-grid">
                   ${p.owner ? `<div class="detail-section">
                     <h4>Owner</h4>
@@ -289,9 +348,37 @@
           });
         });
 
+        // Add click handlers for delete buttons
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation(); // Prevent row expand/collapse
+
+            const pitchId = btn.dataset.pitchId;
+            const index = parseInt(btn.dataset.index, 10);
+            const companyName = pitchesData[index]?.companyName || 'this pitch';
+
+            if (!confirm(`Are you sure you want to delete the pitch for "${companyName}"?`)) {
+              return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Deleting...';
+
+            try {
+              await deletePitch(pitchId);
+              loadPitches(); // Reload the table
+            } catch (err) {
+              console.error('Failed to delete pitch:', err);
+              btn.disabled = false;
+              btn.textContent = 'Delete';
+              alert('Failed to delete pitch: ' + err.message);
+            }
+          });
+        });
+
       } catch (error) {
         console.error('Failed to load pitches:', error);
-        tableBody.innerHTML = `<tr><td colspan="8"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="9"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
       }
     }
 
@@ -312,8 +399,17 @@
     limitFilter.addEventListener('change', loadPitches);
     industryFilter.addEventListener('input', debouncedLoad);
     websiteFilter.addEventListener('input', debouncedLoad);
+    hideContactedFilter.addEventListener('change', () => {
+      saveContactedFilterPreference();
+      loadPitches();
+    });
+    hideDeletedFilter.addEventListener('change', () => {
+      saveDeletedFilterPreference();
+      loadPitches();
+    });
 
-    // Initial load
+    // Load filter preferences and initial data
+    loadFilterPreferences();
     loadPitches();
   </script>
 </body>

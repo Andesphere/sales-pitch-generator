@@ -191,6 +191,24 @@ nav a.active {
   opacity: 0.9;
 }
 
+/* Checkbox filter in filter bar */
+.filter-bar .checkbox-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.filter-bar .checkbox-filter input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
 /* Tables */
 .table-container {
   overflow-x: auto;
@@ -457,6 +475,29 @@ a:hover {
 }
 
 .mark-contacted-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Delete button */
+.delete-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  background: var(--color-card);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.delete-btn:hover {
+  background: var(--color-danger);
+  color: white;
+}
+
+.delete-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

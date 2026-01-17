@@ -35,6 +35,17 @@ function parseBoolean(value: string | null): boolean | undefined {
   return undefined;
 }
 
+const VALID_PROSPECT_STATUSES = ["new", "pitched", "contacted", "responded", "converted"] as const;
+type ProspectStatus = typeof VALID_PROSPECT_STATUSES[number];
+
+function isValidStatus(status: string): status is ProspectStatus {
+  return VALID_PROSPECT_STATUSES.includes(status as ProspectStatus);
+}
+
+function validationError(message: string): Response {
+  return jsonResponse({ success: false, message: `Validation error: ${message}`, data: null }, 400);
+}
+
 // ============================================
 // POST /api/prospect
 // Creates a search record and its prospects
@@ -46,32 +57,16 @@ http.route({
     try {
       const body = await request.json();
 
-      // Validate required fields
       if (!body.search || !body.prospects) {
-        return jsonResponse(
-          {
-            success: false,
-            message: "Validation error: 'search' and 'prospects' are required",
-            data: null,
-          },
-          400
-        );
+        return validationError("'search' and 'prospects' are required");
       }
 
       const { search, prospects } = body;
 
-      // Validate search fields
       const requiredSearchFields = ["industry", "location", "count"];
       for (const field of requiredSearchFields) {
         if (search[field] === undefined) {
-          return jsonResponse(
-            {
-              success: false,
-              message: `Validation error: 'search.${field}' is required`,
-              data: null,
-            },
-            400
-          );
+          return validationError(`'search.${field}' is required`);
         }
       }
 
@@ -169,32 +164,14 @@ http.route({
     try {
       const body = await request.json();
 
-      // Validate required fields
       if (!body.prospectId || !body.status) {
-        return jsonResponse(
-          {
-            success: false,
-            message: "Validation error: 'prospectId' and 'status' are required",
-            data: null,
-          },
-          400
-        );
+        return validationError("'prospectId' and 'status' are required");
       }
 
-      // Validate status is one of the allowed values
-      const validStatuses = ["new", "pitched", "contacted", "responded", "converted"];
-      if (!validStatuses.includes(body.status)) {
-        return jsonResponse(
-          {
-            success: false,
-            message: `Validation error: 'status' must be one of: ${validStatuses.join(", ")}`,
-            data: null,
-          },
-          400
-        );
+      if (!isValidStatus(body.status)) {
+        return validationError(`'status' must be one of: ${VALID_PROSPECT_STATUSES.join(", ")}`);
       }
 
-      // Update the prospect status
       await ctx.runMutation(internal.prospects.updateStatusInternal, {
         id: body.prospectId,
         status: body.status,
@@ -218,6 +195,78 @@ http.route({
 });
 
 // ============================================
+// POST /api/prospect/delete
+// Soft delete a prospect
+// ============================================
+http.route({
+  path: "/api/prospect/delete",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+
+      if (!body.prospectId) {
+        return validationError("'prospectId' is required");
+      }
+
+      await ctx.runMutation(internal.prospects.softDeleteInternal, {
+        id: body.prospectId,
+      });
+
+      return jsonResponse({
+        success: true,
+        message: "Prospect deleted",
+        data: { prospectId: body.prospectId },
+      });
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/prospect/delete",
+  method: "OPTIONS",
+  handler: httpAction(async () => corsResponse()),
+});
+
+// ============================================
+// POST /api/pitch/delete
+// Soft delete a pitch
+// ============================================
+http.route({
+  path: "/api/pitch/delete",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+
+      if (!body.pitchId) {
+        return validationError("'pitchId' is required");
+      }
+
+      await ctx.runMutation(internal.pitches.softDeleteInternal, {
+        id: body.pitchId,
+      });
+
+      return jsonResponse({
+        success: true,
+        message: "Pitch deleted",
+        data: { pitchId: body.pitchId },
+      });
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/pitch/delete",
+  method: "OPTIONS",
+  handler: httpAction(async () => corsResponse()),
+});
+
+// ============================================
 // POST /api/pitch
 // Creates a pitch and links to existing prospect
 // ============================================
@@ -228,23 +277,10 @@ http.route({
     try {
       const body = await request.json();
 
-      // Validate required fields
-      const requiredFields = [
-        "companyName",
-        "website",
-        "industry",
-        "pitchOptions",
-      ];
+      const requiredFields = ["companyName", "website", "industry", "pitchOptions"];
       for (const field of requiredFields) {
         if (body[field] === undefined) {
-          return jsonResponse(
-            {
-              success: false,
-              message: `Validation error: '${field}' is required`,
-              data: null,
-            },
-            400
-          );
+          return validationError(`'${field}' is required`);
         }
       }
 

@@ -2,9 +2,9 @@
 const API_BASE = 'https://flippant-dodo-971.convex.site';
 
 /**
- * Generic fetch wrapper with error handling
+ * Generic fetch wrapper with error handling.
  * @param {string} endpoint - API endpoint path
- * @param {Object} options - Fetch options
+ * @param {Object} options - Fetch options (method, params, body, headers)
  * @returns {Promise<Object>} API response data
  */
 async function apiFetch(endpoint, options = {}) {
@@ -33,45 +33,65 @@ async function apiFetch(endpoint, options = {}) {
   return data;
 }
 
-/**
- * Fetch pipeline statistics
- */
-export async function fetchStats() {
+/** Fetch pipeline statistics. */
+export function fetchStats() {
   return apiFetch('/api/stats');
 }
 
 /**
- * Fetch prospects with optional filters
+ * Fetch prospects with optional filters.
  * @param {Object} filters - { status?, isLocal?, limit? }
  */
-export async function fetchProspects(filters = {}) {
+export function fetchProspects(filters = {}) {
   return apiFetch('/api/prospects', { params: filters });
 }
 
 /**
- * Fetch pitches with optional filters
+ * Fetch pitches with optional filters.
  * @param {Object} filters - { industry?, isLocal?, website?, limit? }
  */
-export async function fetchPitches(filters = {}) {
+export function fetchPitches(filters = {}) {
   return apiFetch('/api/pitches', { params: filters });
 }
 
 /**
- * Fetch searches with optional filters
+ * Fetch searches with optional filters.
  * @param {Object} filters - { limit? }
  */
-export async function fetchSearches(filters = {}) {
+export function fetchSearches(filters = {}) {
   return apiFetch('/api/searches', { params: filters });
 }
 
 /**
- * Update a prospect's status
+ * Update a prospect's status.
  * @param {string} prospectId - Prospect ID
  * @param {string} status - New status (new, pitched, contacted, responded, converted)
  */
-export async function updateProspectStatus(prospectId, status) {
+export function updateProspectStatus(prospectId, status) {
   return apiFetch('/api/prospect/status', {
     method: 'POST',
     body: { prospectId, status },
+  });
+}
+
+/**
+ * Soft delete a prospect.
+ * @param {string} prospectId - Prospect ID
+ */
+export function deleteProspect(prospectId) {
+  return apiFetch('/api/prospect/delete', {
+    method: 'POST',
+    body: { prospectId },
+  });
+}
+
+/**
+ * Soft delete a pitch.
+ * @param {string} pitchId - Pitch ID
+ */
+export function deletePitch(pitchId) {
+  return apiFetch('/api/pitch/delete', {
+    method: 'POST',
+    body: { pitchId },
   });
 }

@@ -31,6 +31,7 @@ export default defineSchema({
     sources: v.array(v.string()), // ["tavily", "exa", "websearch"]
     notes: v.optional(v.string()),
     status: v.string(), // "new" | "pitched" | "contacted" | "responded" | "converted"
+    isDeleted: v.optional(v.boolean()), // undefined = false for existing records
     createdAt: v.number(),
   })
     .index("by_searchId", ["searchId"])
@@ -98,6 +99,7 @@ export default defineSchema({
       })
     ),
     customInstructions: v.optional(v.string()),
+    isDeleted: v.optional(v.boolean()), // undefined = false for existing records
     createdAt: v.number(),
   })
     .index("by_prospectId", ["prospectId"])

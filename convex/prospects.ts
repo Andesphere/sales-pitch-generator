@@ -62,17 +62,27 @@ export const updateStatusInternal = internalMutation({
   },
 });
 
+// Internal mutation to soft delete a prospect
+export const softDeleteInternal = internalMutation({
+  args: { id: v.id("prospects") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { isDeleted: true });
+    return args.id;
+  },
+});
+
 // Internal query to list prospects with filters
 export const listWithFiltersInternal = internalQuery({
   args: {
     status: v.optional(v.string()),
     isLocal: v.optional(v.boolean()),
     limit: v.optional(v.number()),
+    includeDeleted: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     let query = ctx.db.query("prospects");
 
-    // Apply filters
+    // Use index for single-field filters (most selective first)
     if (args.status !== undefined) {
       query = ctx.db
         .query("prospects")
@@ -85,19 +95,17 @@ export const listWithFiltersInternal = internalQuery({
 
     const results = await query.order("desc").collect();
 
-    // Post-filter if both status and isLocal are specified
-    let filtered = results;
-    if (args.status !== undefined && args.isLocal !== undefined) {
-      filtered = results.filter(
-        (p) => p.status === args.status && p.isLocal === args.isLocal
-      );
-    } else if (args.isLocal !== undefined && args.status === undefined) {
-      // Already filtered by index
-    } else if (args.status !== undefined && args.isLocal === undefined) {
-      // Already filtered by index
-    }
+    // Apply post-filters for multi-field queries and soft-delete
+    const filtered = results.filter((p) => {
+      if (args.status !== undefined && args.isLocal !== undefined && p.isLocal !== args.isLocal) {
+        return false;
+      }
+      if (!args.includeDeleted && p.isDeleted) {
+        return false;
+      }
+      return true;
+    });
 
-    // Apply limit
     if (args.limit !== undefined) {
       return filtered.slice(0, args.limit);
     }
@@ -109,7 +117,9 @@ export const listWithFiltersInternal = internalQuery({
 export const getPipelineStatsInternal = internalQuery({
   args: {},
   handler: async (ctx) => {
-    const prospects = await ctx.db.query("prospects").collect();
+    const allProspects = await ctx.db.query("prospects").collect();
+    // Exclude deleted records from stats
+    const prospects = allProspects.filter((p) => !p.isDeleted);
     const stats = {
       new: 0,
       pitched: 0,
@@ -291,7 +301,9 @@ export const list = query({
 export const getPipelineStats = query({
   args: {},
   handler: async (ctx) => {
-    const prospects = await ctx.db.query("prospects").collect();
+    const allProspects = await ctx.db.query("prospects").collect();
+    // Exclude deleted records from stats
+    const prospects = allProspects.filter((p) => !p.isDeleted);
     const stats = {
       new: 0,
       pitched: 0,

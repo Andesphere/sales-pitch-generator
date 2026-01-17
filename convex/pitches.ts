@@ -95,6 +95,15 @@ export const createInternal = internalMutation({
   },
 });
 
+// Internal mutation to soft delete a pitch
+export const softDeleteInternal = internalMutation({
+  args: { id: v.id("pitches") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { isDeleted: true });
+    return args.id;
+  },
+});
+
 // Internal query to list pitches with filters
 export const listWithFiltersInternal = internalQuery({
   args: {
@@ -102,24 +111,27 @@ export const listWithFiltersInternal = internalQuery({
     isLocal: v.optional(v.boolean()),
     website: v.optional(v.string()),
     limit: v.optional(v.number()),
+    includeDeleted: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    // If searching by website, use that index
+    // Website search uses unique index - return single result
     if (args.website !== undefined) {
       const pitch = await ctx.db
         .query("pitches")
         .withIndex("by_website", (q) => q.eq("website", args.website!))
         .first();
-      if (!pitch) return [];
 
-      // Look up linked prospect to get status
+      if (!pitch || (pitch.isDeleted && !args.includeDeleted)) {
+        return [];
+      }
+
       const prospect = pitch.prospectId ? await ctx.db.get(pitch.prospectId) : null;
       return [{ ...pitch, prospectStatus: prospect?.status ?? null }];
     }
 
     let query = ctx.db.query("pitches");
 
-    // Apply filters
+    // Use index for single-field filters (most selective first)
     if (args.industry !== undefined) {
       query = ctx.db
         .query("pitches")
@@ -132,20 +144,22 @@ export const listWithFiltersInternal = internalQuery({
 
     const results = await query.order("desc").collect();
 
-    // Post-filter if both industry and isLocal are specified
-    let filtered = results;
-    if (args.industry !== undefined && args.isLocal !== undefined) {
-      filtered = results.filter(
-        (p) => p.industry === args.industry && p.isLocal === args.isLocal
-      );
-    }
+    // Apply post-filters for multi-field queries and soft-delete
+    let filtered = results.filter((p) => {
+      if (args.industry !== undefined && args.isLocal !== undefined && p.isLocal !== args.isLocal) {
+        return false;
+      }
+      if (!args.includeDeleted && p.isDeleted) {
+        return false;
+      }
+      return true;
+    });
 
-    // Apply limit
     if (args.limit !== undefined) {
       filtered = filtered.slice(0, args.limit);
     }
 
-    // Look up linked prospects to get status for each pitch
+    // Attach prospect status to each pitch
     const pitchesWithStatus = await Promise.all(
       filtered.map(async (pitch) => {
         const prospect = pitch.prospectId ? await ctx.db.get(pitch.prospectId) : null;
@@ -161,7 +175,9 @@ export const listWithFiltersInternal = internalQuery({
 export const getStatsInternal = internalQuery({
   args: {},
   handler: async (ctx) => {
-    const pitches = await ctx.db.query("pitches").collect();
+    const allPitches = await ctx.db.query("pitches").collect();
+    // Exclude deleted records from stats
+    const pitches = allPitches.filter((p) => !p.isDeleted);
     const localCount = pitches.filter((p) => p.isLocal).length;
     const industriesSet = new Set(pitches.map((p) => p.industry));
 
@@ -346,7 +362,9 @@ export const list = query({
 export const getStats = query({
   args: {},
   handler: async (ctx) => {
-    const pitches = await ctx.db.query("pitches").collect();
+    const allPitches = await ctx.db.query("pitches").collect();
+    // Exclude deleted records from stats
+    const pitches = allPitches.filter((p) => !p.isDeleted);
     const localCount = pitches.filter((p) => p.isLocal).length;
     const industriesSet = new Set(pitches.map((p) => p.industry));
 

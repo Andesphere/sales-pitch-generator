@@ -39,6 +39,16 @@
         <option value="false">No</option>
       </select>
 
+      <label class="checkbox-filter">
+        <input type="checkbox" id="filter-hide-contacted">
+        Hide Contacted
+      </label>
+
+      <label class="checkbox-filter">
+        <input type="checkbox" id="filter-hide-deleted" checked>
+        Hide Deleted
+      </label>
+
       <label>Limit:</label>
       <select id="filter-limit">
         <option value="25">25</option>
@@ -62,27 +72,53 @@
             <th>Confidence</th>
             <th>Sources</th>
             <th>Created</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="prospects-table">
-          <tr><td colspan="7"><div class="loading">Loading prospects...</div></td></tr>
+          <tr><td colspan="8"><div class="loading">Loading prospects...</div></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <script type="module">
-    import { fetchProspects } from './js/api.js';
+    import { fetchProspects, deleteProspect } from './js/api.js';
     import { formatDate, statusBadge, confidenceBadge, escapeHtml } from './js/utils.js';
 
     const tableBody = document.getElementById('prospects-table');
     const statusFilter = document.getElementById('filter-status');
     const localFilter = document.getElementById('filter-local');
     const limitFilter = document.getElementById('filter-limit');
+    const hideContactedFilter = document.getElementById('filter-hide-contacted');
+    const hideDeletedFilter = document.getElementById('filter-hide-deleted');
     const refreshBtn = document.getElementById('refresh-btn');
 
+    // Filter constants and localStorage keys
+    const HIDE_CONTACTED_KEY = 'hideContactedFilter';
+    const HIDE_DELETED_KEY = 'hideDeletedFilter';
+    const CONTACTED_STATUSES = ['contacted', 'responded', 'converted'];
+
+    function loadFilterPreferences() {
+      hideContactedFilter.checked = localStorage.getItem(HIDE_CONTACTED_KEY) === 'true';
+      // Default to true if not set
+      const hideDeletedValue = localStorage.getItem(HIDE_DELETED_KEY);
+      hideDeletedFilter.checked = hideDeletedValue === null ? true : hideDeletedValue === 'true';
+    }
+
+    function saveContactedFilterPreference() {
+      localStorage.setItem(HIDE_CONTACTED_KEY, hideContactedFilter.checked);
+    }
+
+    function saveDeletedFilterPreference() {
+      localStorage.setItem(HIDE_DELETED_KEY, hideDeletedFilter.checked);
+    }
+
+    // Store prospects data for delete functionality
+    let prospectsData = [];
+
     async function loadProspects() {
-      tableBody.innerHTML = '<tr><td colspan="7"><div class="loading">Loading prospects...</div></td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="8"><div class="loading">Loading prospects...</div></td></tr>';
 
       try {
         const filters = {
@@ -92,15 +128,27 @@
         };
 
         const response = await fetchProspects(filters);
-        const prospects = response.data.prospects;
+        let prospects = response.data.prospects;
+
+        // Apply client-side filter for contacted statuses
+        if (hideContactedFilter.checked) {
+          prospects = prospects.filter(p => !CONTACTED_STATUSES.includes(p.status));
+        }
+
+        // Apply client-side filter for deleted
+        if (hideDeletedFilter.checked) {
+          prospects = prospects.filter(p => !p.isDeleted);
+        }
+
+        prospectsData = prospects; // Store for delete functionality
 
         if (prospects.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="7"><div class="empty">No prospects found</div></td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="8"><div class="empty">No prospects found</div></td></tr>';
           return;
         }
 
-        tableBody.innerHTML = prospects.map(p => `
-          <tr>
+        tableBody.innerHTML = prospects.map((p, index) => `
+          <tr${p.isDeleted ? ' style="opacity: 0.5;"' : ''}>
             <td>
               <a href="${escapeHtml(p.url)}" target="_blank" rel="noopener">${escapeHtml(p.name)}</a>
             </td>
@@ -110,12 +158,43 @@
             <td>${confidenceBadge(p.confidence)}</td>
             <td>${(p.sources || []).map(s => escapeHtml(s)).join(', ') || '—'}</td>
             <td>${formatDate(p.createdAt)}</td>
+            <td>
+              ${p.isDeleted
+                ? '<span class="text-muted">Deleted</span>'
+                : `<button class="delete-btn" data-prospect-id="${p._id}" data-index="${index}">Delete</button>`}
+            </td>
           </tr>
         `).join('');
 
+        // Add click handlers for delete buttons
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const prospectId = btn.dataset.prospectId;
+            const index = parseInt(btn.dataset.index, 10);
+            const prospectName = prospectsData[index]?.name || 'this prospect';
+
+            if (!confirm(`Are you sure you want to delete "${prospectName}"?`)) {
+              return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Deleting...';
+
+            try {
+              await deleteProspect(prospectId);
+              loadProspects(); // Reload the table
+            } catch (err) {
+              console.error('Failed to delete prospect:', err);
+              btn.disabled = false;
+              btn.textContent = 'Delete';
+              alert('Failed to delete prospect: ' + err.message);
+            }
+          });
+        });
+
       } catch (error) {
         console.error('Failed to load prospects:', error);
-        tableBody.innerHTML = `<tr><td colspan="7"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8"><div class="error">Error: ${escapeHtml(error.message)}</div></td></tr>`;
       }
     }
 
@@ -124,8 +203,17 @@
     statusFilter.addEventListener('change', loadProspects);
     localFilter.addEventListener('change', loadProspects);
     limitFilter.addEventListener('change', loadProspects);
+    hideContactedFilter.addEventListener('change', () => {
+      saveContactedFilterPreference();
+      loadProspects();
+    });
+    hideDeletedFilter.addEventListener('change', () => {
+      saveDeletedFilterPreference();
+      loadProspects();
+    });
 
-    // Initial load
+    // Load filter preferences and initial data
+    loadFilterPreferences();
     loadProspects();
   </script>
 </body>
